@@ -1654,7 +1654,7 @@ def trace_tilt(slf, det, msarc, slitnum, censpec=None, maskval=-999999.9,
     # Go along each order and trace the tilts
     # Start by masking every row, then later unmask the rows with usable arc lines
     msgs.work("This next step could be multiprocessed to speed up the reduction")
-    nspecfit = 3
+    nspecfit = 5
     badlines = 0
     for j in range(arcdet.size):
         # For each detection in this order
@@ -2048,8 +2048,13 @@ def echelle_tilt(slf, msarc, det, pcadesc="PCA trace of the spectral tilts", mas
         # ------------------------------------------------------------------------------
         if msgs._debug['tilts']:
             msgs.info("BMJ testing: debugging tilts")
-            debugger.chk_arc_tilts(msarc, trcdict, sedges=(slf._lordloc[det-1][:,o], slf._rordloc[det-1][:,o]), clearcanvas=False)
-            debugger.set_trace()
+            if o == 0:
+                debugger.chk_arc_tilts(msarc, trcdict, sedges=(slf._lordloc[det-1][:,o], slf._rordloc[det-1][:,o]), clearcanvas=True)
+            else:
+                debugger.chk_arc_tilts(msarc, trcdict, sedges=(slf._lordloc[det-1][:,o], slf._rordloc[det-1][:,o]), clearcanvas=False)
+            #debugger.set_trace()
+            if o == norders-1:
+                debugger.set_trace()
         # ------------------------------------------------------------------------------
         aduse = trcdict["aduse"]
         arcdet = trcdict["arcdet"]
