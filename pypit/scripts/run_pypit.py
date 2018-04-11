@@ -23,7 +23,7 @@ from pypit import ardebug
 #from pypit.scripts import qa_html
 
 # Globals
-#debug = ardebug.init()
+debug = ardebug.init()
 #debug['develop'] = True
 #debug['arc'] = True
 #debug['sky_sub'] = True

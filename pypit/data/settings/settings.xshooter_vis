@@ -19,8 +19,8 @@ det01 numamplifiers 1                 # Number of amplifiers # TODO check
 det01 gain 0.595                      # Gain (e-/ADU) values # TODO depends on the readout mode!
 det01 ronoise 3.1                     # RON (e-) # TODO depends on the readout mode!
 det01 dataext01 0                     # Extension number of the data
-det01 datasec01 [0:4000,10:2058]      # Either the data sections or the header keyword where the valid data sections can be obtained # TODO in IRAF notation: [11:2058,1:4000], and that's for an unbinned frame
-det01 oscansec01 [0:4000,2062:2106]   # Either the overscan sections or the header keyword where the valid overscan sections can be obtained # TODO in IRAF notation: [2063:2106,1:4000], and that's for an unbinned frame; also note that there's an overscan section on the left that I don't know how to enter (can you have two?)
+det01 datasec01 [1:4000,11:2059]      # Either the data sections or the header keyword where the valid data sections can be obtained # TODO in IRAF notation: [11:2058,1:4000], and that's for an unbinned frame
+det01 oscansec01 [1:4000,2063:2106]   # Either the overscan sections or the header keyword where the valid overscan sections can be obtained # TODO in IRAF notation: [2063:2106,1:4000], and that's for an unbinned frame; also note that there's an overscan section on the left that I don't know how to enter (can you have two?)
 det01 suffix _VIS                     # Suffix to be appended to all saved calibration and extraction frames
 
 ### Checks to perform

@@ -673,6 +673,7 @@ def get_datasec_trimmed(slf, fitsdict, det, scidx):
     retarr = np.zeros((naxis0, naxis1))
     for i in range(settings.spect[dnum]['numamplifiers']):
         datasec = "datasec{0:02d}".format(i+1)
+        #settings.spect[dnum][datasec] = settings.load_sections(settings.spect[dnum][datasec], fmt_iraf=True)
         x0, x1 = settings.spect[dnum][datasec][0][0], settings.spect[dnum][datasec][0][1]
         y0, y1 = settings.spect[dnum][datasec][1][0], settings.spect[dnum][datasec][1][1]
         if x0 < 0: x0 += naxis0
@@ -686,6 +687,8 @@ def get_datasec_trimmed(slf, fitsdict, det, scidx):
         try:
             retarr[w] = i+1
         except IndexError:
+            #from IPython import embed
+            #embed()
             debugger.set_trace()
         # Save these locations for trimming
         if i == 0:

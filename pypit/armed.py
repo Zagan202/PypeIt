@@ -64,6 +64,8 @@ def ARMED(fitsdict, reuseMaster=False, reloadMaster=True):
         scidx = slf._idx_sci[0]
         msgs.info("Reducing file {0:s}, target {1:s}".format(fitsdict['filename'][scidx], slf._target_name))
         msgs.sciexp = slf  # For QA writing on exit, if nothing else.  Could write Masters too
+        from IPython import embed
+        embed()
         if reloadMaster and (sc > 0):
             settings.argflag['reduce']['masters']['reuse'] = True
         # Loop on Detectors

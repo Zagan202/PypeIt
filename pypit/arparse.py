@@ -2507,6 +2507,7 @@ class BaseSpect(BaseFunctions):
                 msgs.error("The argument of {0:s} must be a detector section".format(cname))
         self.update(v, ll=cname.split('_'))
 
+
     def det_dataext(self, v, anmbr=1, bnmbr=1):
         """ Extension number of data
 
