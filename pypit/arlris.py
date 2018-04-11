@@ -5,7 +5,8 @@ import numpy as np
 import glob
 import astropy.io.fits as pyfits
 
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 from pypit.arparse import load_sections
 
 from pypit import ardebug as debugger
@@ -16,7 +17,7 @@ except NameError:  # For Python 3
     basestring = str
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 
 def read_lris(raw_file, det=None, TRIM=False):
@@ -79,7 +80,7 @@ def read_lris(raw_file, det=None, TRIM=False):
         detsec = theader['DETSEC']
         if detsec != '0':
             # parse the DETSEC keyword to determine the size of the array.
-            x1, x2, y1, y2 = np.array(load_sections(detsec)).flatten()
+            x1, x2, y1, y2 = np.array(load_sections(detsec, fmt_iraf=False)).flatten()
 
             # find the range of detector space occupied by the data
             # [xmin:xmax,ymin:ymax]
@@ -128,7 +129,6 @@ def read_lris(raw_file, det=None, TRIM=False):
     # allocate output array...
     array = np.zeros( (nx, ny) )
     order = np.argsort(np.array(xcol))
-
 
     # insert extensions into master image...
     for kk, i in enumerate(order[det_idx]):
@@ -265,11 +265,11 @@ def lris_read_amp(inp, ext):
     # parse the DETSEC keyword to determine the size of the array.
     header = hdu[ext].header
     detsec = header['DETSEC']
-    x1, x2, y1, y2 = np.array(load_sections(detsec)).flatten()
+    x1, x2, y1, y2 = np.array(load_sections(detsec, fmt_iraf=False)).flatten()
 
     # parse the DATASEC keyword to determine the size of the science region (unbinned)
     datasec = header['DATASEC']
-    xdata1, xdata2, ydata1, ydata2 = np.array(load_sections(datasec)).flatten()
+    xdata1, xdata2, ydata1, ydata2 = np.array(load_sections(datasec, fmt_iraf=False)).flatten()
 
     # grab the components...
     predata = temp[0:precol, :]

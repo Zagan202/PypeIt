@@ -14,6 +14,13 @@ Basic Algorithms
 These notes will describe the algorithms used to perform
 wavelength calibration with PYPIT.
 
+
+Adjusting How PYPIT Runs
+========================
+
+Limit tilt analysis to only the arc lines identified in 1D wavelength solution::
+    trace slits tilts idsonly True 
+
 Line Lists
 ==========
 
@@ -148,13 +155,17 @@ is controlled by the argument::
 where the default value is to calibrate to vacuum. You can also
 specify 'pixel', which will save the pixel values instead of the
 wavelength values (i.e. a wavelength calibration will not be
-performed).
+performed).  The calibration follows the Ciddor schema
+(Ciddor 1996, Applied Optics 62, 958).
+
 
 You can also choose if you want the wavelength scale corrected
 to the heliocentric (Sun-centered), barycentric (Solar system
-barycentre), or none (no correction). This option is governed
-by the command::
+barycentre), or topocentric (telescope centered). None is also
+an option, but this defaults to topocentric. This option
+is governed by the command::
 
     reduce calibrate refframe barycentric
 
 where the default value is a heliocentric wavelength scale.
+More details are provided in :doc:`heliocorr`.

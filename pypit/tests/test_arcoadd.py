@@ -1,4 +1,8 @@
 # Module to run tests on arcoadd
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 ### TEST_UNICODE_LITERALS
 
@@ -281,7 +285,7 @@ def test_coadd():
     dspec = dummy_spectra(s2n=10.)
     dspec.data['flux'][0, 700] *= 1000.  # One bad pixel
     dspec.data['sig'][0, 700] *= 500.
-    arco.coadd_spectra(dspec, wave_method='concatenate')
+    arco.coadd_spectra(dspec, wave_grid_method='concatenate')
 
 
 def test_coadd_qa():

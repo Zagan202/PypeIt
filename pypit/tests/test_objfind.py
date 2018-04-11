@@ -1,4 +1,8 @@
 # Module to run tests on ararclines
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 
 import os
@@ -67,9 +71,9 @@ def test_npeaks():
     trc = tbl['trc'].data
     # Call
     peaks, sigmas, ledges, redges = arutils.find_nminima(-1*trc, nsmooth=3)
-    np.testing.assert_allclose(peaks, np.array([  4.86511462e+01,  -4.53105168e-03,   7.17466301e+01,
+    np.testing.assert_allclose(peaks, np.array([  4.86511462e+01,  -4.530896e-03,   7.17466301e+01,
          1.67786437e+02,   1.35216283e+02,   1.88809673e+02,
-         2.13649812e+02,   2.62738738e+02]), atol=1e-9)
+         2.13649812e+02,   2.62738738e+02]), rtol=1e-5)
 
 
 

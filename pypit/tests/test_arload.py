@@ -1,4 +1,8 @@
 # Module to run tests on arload
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 ### TEST_UNICODE_LITERALS
 
@@ -20,9 +24,9 @@ def data_path(filename):
     return os.path.join(data_dir, filename)
 
 def test_load_headers():
-    arutils.dummy_settings(spectrograph='kast_blue', set_idx=False)
+    arutils.dummy_settings(spectrograph='shane_kast_blue', set_idx=False)
     kast_files = [data_path('b1.fits.gz'), data_path('b27.fits.gz')]
-    fitsdict = arl.load_headers(kast_files)
+    fitsdict, updates = arl.load_headers(kast_files)
     # Test
     headers = fitsdict['headers']
     assert len(headers) == 2

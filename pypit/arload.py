@@ -1,16 +1,20 @@
 from __future__ import (print_function, absolute_import, division, unicode_literals)
+from future.utils import iteritems
 
 import os
 import astropy.io.fits as pyfits
 from astropy.time import Time
 import numpy as np
 from pypit import arparse as settings
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 from pypit import arproc
 from pypit import arlris
+from pypit import ardeimos
 #from multiprocessing import Pool as mpPool
 #from multiprocessing.pool import ApplyResult
 #import arutils
+
 
 try:
     basestring
@@ -20,27 +24,51 @@ except NameError:
 from pypit import ardebug as debugger
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 
 def load_headers(datlines):
-    """
-    Load the header information for each fits file
+    """ Load the header information for each fits file
+    The cards of interest are specified in the instrument settings file
+    A check of specific cards is performed if specified in settings
 
     Parameters
     ----------
     datlines : list
       Input (uncommented) lines specified by the user.
       datlines contains the full data path to every
-      raw exposure listed by the user.
+      raw exposure provided by the user.
 
     Returns
     -------
     fitsdict : dict
       The relevant header information of all fits files
+    keylst : list
     """
-    chks = settings.spect['check'].keys()
-    keys = settings.spect['keyword'].keys()
+    def generate_updates(dct, keylst, keys, whddict, headarr):
+        """ Generate a list of settings to be updated
+        """
+        for (key, value) in iteritems(dct):
+            keys += [str(key)]
+            if isinstance(value, dict):
+                generate_updates(value, keylst, keys, whddict, headarr)
+            else:
+                try:
+                    tfrhd = int(value.split('.')[0]) - 1
+                    kchk = '.'.join(value.split('.')[1:])
+                    frhd = whddict['{0:02d}'.format(tfrhd)]
+                    hdrval = headarr[frhd][kchk]
+                    if keys[0] not in ["check", "keyword"]:
+                        keylst += [str(' ').join(keys) + str(" ") +
+                                   str("{0}\n".format(hdrval).replace(" ", ""))]
+                        keylst[-1] = keylst[-1].split()
+                except (AttributeError, ValueError, KeyError):
+                    pass
+            del keys[-1]
+
+    chks = list(settings.spect['check'].keys())
+    keys = list(settings.spect['keyword'].keys())
+    # Init
     fitsdict = dict({'directory': [], 'filename': [], 'utc': []})
     whddict = dict({})
     for k in keys:
@@ -48,6 +76,7 @@ def load_headers(datlines):
     allhead = []
     headarr = [None for k in range(settings.spect['fits']['numhead'])]
     numfiles = len(datlines)
+    # Loop on files
     for i in range(numfiles):
         # Try to open the fits file
         try:
@@ -60,7 +89,7 @@ def load_headers(datlines):
                 msgs.warn("Proceeding on the hopes this was a calibration file, otherwise consider removing.")
             else:
                 msgs.error("Error reading header from extension {0:d} of file:".format(settings.spect['fits']['headext{0:02d}'.format(k+1)])+msgs.newline()+datlines[i])
-        # Save
+        # Save the headers into a list
         for k in range(settings.spect['fits']['numhead']):
             tmp = [head.copy() for head in headarr]
             allhead.append(tmp)
@@ -68,9 +97,10 @@ def load_headers(datlines):
         skip = False
         for ch in chks:
             tfrhd = int(ch.split('.')[0])-1
-            kchk  = '.'.join(ch.split('.')[1:])
-            frhd  = whddict['{0:02d}'.format(tfrhd)]
-            if settings.spect['check'][ch] != str(headarr[frhd][kchk]).strip():
+            kchk = '.'.join(ch.split('.')[1:])
+            frhd = whddict['{0:02d}'.format(tfrhd)]
+            # JFH changed to in instead of !=
+            if ((settings.spect['check'][ch] in str(headarr[frhd][kchk]).strip()) == False):
                 print(ch, frhd, kchk)
                 print(settings.spect['check'][ch], str(headarr[frhd][kchk]).strip())
                 msgs.warn("The following file:"+msgs.newline()+datlines[i]+msgs.newline()+"is not taken with the settings.{0:s} detector".format(settings.argflag['run']['spectrograph'])+msgs.newline()+"Remove this file, or specify a different settings file.")
@@ -100,7 +130,7 @@ def load_headers(datlines):
             fitsdict['utc'].append(None)
             msgs.warn("UTC is not listed as a header keyword in file:"+msgs.newline()+datlines[i])
         # Read binning-dependent detector properties here? (maybe read speed too)
-        #if settings.argflag['run']['spectrograph'] in ['lris_blue']:
+        #if settings.argflag['run']['spectrograph'] in ['keck_lris_blue']:
         #    arlris.set_det(fitsdict, headarr[k])
         # Now get the rest of the keywords
         for kw in keys:
@@ -120,7 +150,7 @@ def load_headers(datlines):
                     except KeyError: # Keyword not found in header
                         msgs.warn("{:s} keyword not in header. Setting to None".format(kchk))
                         value=str('None')
-            # Convert the input time into hours
+            # Convert the input time into hours -- Should we really do this here??
             if kw == 'time':
                 if settings.spect['fits']['timeunit']   == 's'  : value = float(value)/3600.0    # Convert seconds to hours
                 elif settings.spect['fits']['timeunit'] == 'm'  : value = float(value)/60.0      # Convert minutes to hours
@@ -153,7 +183,14 @@ def load_headers(datlines):
             else:
                 msgs.bug("I didn't expect a useful header ({0:s}) to contain type {1:s}".format(kw, typv).replace('<type ','').replace('>',''))
 
-        msgs.info("Successfully loaded headers for file:"+msgs.newline()+datlines[i])
+        msgs.info("Successfully loaded headers for file:" + msgs.newline() + datlines[i])
+
+    # Check if any other settings require header values to be loaded
+    msgs.info("Checking spectrograph settings for required header information")
+    # Just use the header info from the last file
+    keylst = []
+    generate_updates(settings.spect.copy(), keylst, [], whddict, headarr)
+
     # Convert the fitsdict arrays into numpy arrays
     for k in fitsdict.keys():
         fitsdict[k] = np.array(fitsdict[k])
@@ -165,7 +202,7 @@ def load_headers(datlines):
                    "Please check that the settings file matches the data.")
     # Return
     fitsdict['headers'] = allhead
-    return fitsdict
+    return fitsdict, keylst
 
 
 def load_frames(fitsdict, ind, det, frametype='<None>', msbias=None, trim=True):
@@ -201,8 +238,10 @@ def load_frames(fitsdict, ind, det, frametype='<None>', msbias=None, trim=True):
     msgs.work("Implement multiprocessing here (better -- at the moment it's slower than not) to speed up data reading")
     for i in range(np.size(ind)):
         # Instrument specific read
-        if settings.argflag['run']['spectrograph'] in ['lris_blue', 'lris_red']:
+        if settings.argflag['run']['spectrograph'] in ['keck_lris_blue', 'keck_lris_red']:
             temp, head0, _ = arlris.read_lris(fitsdict['directory'][ind[i]]+fitsdict['filename'][ind[i]], det=det)
+        elif settings.argflag['run']['spectrograph'] in ['keck_deimos']:
+            temp, head0, _ = ardeimos.read_deimos(fitsdict['directory'][ind[i]] + fitsdict['filename'][ind[i]])
         else:
             hdulist = pyfits.open(fitsdict['directory'][ind[i]]+fitsdict['filename'][ind[i]])
             temp = hdulist[settings.spect[dnum]['dataext01']].data
@@ -338,7 +377,7 @@ def load_master(name, exten=0, frametype='<None>'):
             if settings.argflag['reduce']['masters']['force']:
                 msgs.error("Master calibration file does not exist:"+msgs.newline()+name)
             else:
-                raise IOError
+                msgs.error("Could not properly ready Master calibration file:"+msgs.newline()+name)
         msgs.info("Master {0:s} frame loaded successfully:".format(hdu[0].header['FRAMETYP'])+msgs.newline()+name)
         head = hdu[0].header
         data = hdu[exten].data.astype(np.float)

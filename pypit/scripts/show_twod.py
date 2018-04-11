@@ -56,7 +56,10 @@ def main(args):
     try:
         exten = names.index('DET{:s}-SKYSUB'.format(sdet))
     except ValueError:  # Backwards compatability
-        exten = names.index('DET{:d}-SKYSUB'.format(args.det))
+        try:
+            exten = names.index('DET{:d}-SKYSUB'.format(args.det))
+        except ValueError:
+            raise IOError("Requested detector {:s} was not processed.\n Maybe you chose the wrong one to view?\n  Set with --det=".format(sdet))
     skysub = hdu[exten].data
 
     # Show Image
@@ -67,7 +70,7 @@ def main(args):
     # Add slits
     testing = False
     if testing:
-        mdir = 'MF_lris_blue/'
+        mdir = 'MF_keck_lris_blue/'
         setup = 'A_{:s}_aa'.format(sdet)
     else:
         mdir = head0['PYPMFDIR']+'/'

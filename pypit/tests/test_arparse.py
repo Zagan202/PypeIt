@@ -1,4 +1,8 @@
 # Module to run tests on arparse
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import pytest
 
@@ -18,9 +22,9 @@ def test_load_armlsd():
     argf = arparse.get_argflag_class(('ARMLSD', ''))
     argf.init_param()
     argf.set_param('run pypitdir {0:s}'.format('pypit'))
-    argf.set_param('run redname {0:s}'.format('kast_blue_setup_01'))
+    argf.set_param('run redname {0:s}'.format('shane_kast_blue_setup_01'))
     # Test
-    assert argf._argflag['run']['redname'] == 'kast_blue_setup_01'
+    assert argf._argflag['run']['redname'] == 'shane_kast_blue_setup_01'
     assert argf._argflag['reduce']['trim'] == True
     assert argf._argflag['reduce']['skysub']['perform'] == True
     # Save
@@ -31,7 +35,7 @@ def test_load_spectrograph():
     """ Test loading of spectrograph
     Using kast_blue as a fiducial example
     """
-    spect = arparse.get_spect_class(('ARMLSD', 'kast_blue', 'kast_blue_setup_01'))
+    spect = arparse.get_spect_class(('ARMLSD', 'shane_kast_blue', 'shane_kast_blue_setup_01'))
     lines = spect.load_file()
     spect.set_paramlist(lines)
     # Test

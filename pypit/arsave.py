@@ -12,7 +12,8 @@ from astropy.table import Table
 
 import h5py
 
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 from pypit import arutils
 from pypit import arparse as settings
 
@@ -22,7 +23,7 @@ try: input = raw_input
 except NameError: pass
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 
 def save_arcids(fname, pixels):
@@ -427,6 +428,7 @@ def save_1d_spectra_fits(slf, fitsdict, standard=False, clobber=True, outfile=No
 
     Returns
     -------
+    outfile : str
     """
     # Primary hdu
     prihdu = pyfits.PrimaryHDU()
@@ -509,6 +511,7 @@ def save_1d_spectra_fits(slf, fitsdict, standard=False, clobber=True, outfile=No
     if outfile is None:
         outfile = settings.argflag['run']['directory']['science']+'/spec1d_{:s}.fits'.format(slf._basename)
     hdulist.writeto(outfile, overwrite=clobber)
+    return outfile
 
 
 
@@ -627,7 +630,7 @@ def save_2d_images(slf, fitsdict, clobber=True):
         sdet = settings.get_dnum(det, caps=True)  # e.g. DET02
         # Specified detector number?
         if settings.argflag['reduce']['detnum'] is not None:
-            if det != settings.argflag['reduce']['detnum']:
+            if det not in map(int, settings.argflag['reduce']['detnum']):
                 continue
             else:
                 msgs.warn("Restricting the reduction to detector {:d}".format(det))

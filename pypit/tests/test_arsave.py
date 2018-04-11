@@ -1,4 +1,8 @@
 # Module to run tests on arsave
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 
 import numpy as np
@@ -61,7 +65,7 @@ def test_save1d_fits():
     """ save1d to FITS and HDF5
     """
     arut.dummy_settings()
-    fitsdict = arut.dummy_fitsdict(nfile=10, spectrograph='kast_blue', directory=data_path(''))
+    fitsdict = arut.dummy_fitsdict(nfile=10, spectrograph='shane_kast_blue', directory=data_path(''))
     # Dummy self
     slf = arut.dummy_self()
     slf._specobjs = []

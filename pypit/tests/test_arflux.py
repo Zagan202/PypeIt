@@ -1,4 +1,8 @@
 # Module to run tests on simple fitting routines for arrays
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 ### TEST_UNICODE_LITERALS
 
@@ -7,8 +11,15 @@ import sys
 import os, pdb
 import pytest
 
+try:
+    tsterror = FileExistsError
+except NameError:
+    FileExistsError = OSError
+
 from astropy import units as u
 from astropy.units import Quantity
+
+from linetools import utils as ltu
 
 from pypit import pyputils
 msgs = pyputils.get_dummy_logger()
@@ -25,6 +36,15 @@ def data_path(filename):
     data_dir = os.path.join(os.path.dirname(__file__), 'files')
     return os.path.join(data_dir, filename)
 
+def test_bspline_fit():
+    # Testing the bspline works ok (really testing bkspace)
+    fit_dict = ltu.loadjson(data_path('flux_data.json'))
+    wave = np.array(fit_dict['wave'])
+    magfunc = np.array(fit_dict['magf'])
+    logivar = np.array(fit_dict['logiv'])
+    kwargs = dict(bkspace=fit_dict['bkspec'])
+    mask, tck = arutils.robust_polyfit(wave, magfunc, 3, function='bspline', weights=np.sqrt(logivar), **kwargs)
+
 
 def test_gen_sensfunc():
     # Load a random spectrum for the sensitivity function
@@ -32,7 +52,7 @@ def test_gen_sensfunc():
     specobjs = arload.load_specobj(sfile)
     # Settings, etc.
     arutils.dummy_settings()
-    settings.argflag['run']['spectrograph'] = 'kast_blue'
+    settings.argflag['run']['spectrograph'] = 'shane_kast_blue'
     settings.argflag['reduce']['masters']['setup'] = 'C_01_aa'
     settings.spect['arc'] = {}
     settings.spect['arc']['index'] = [[0]]
@@ -44,7 +64,7 @@ def test_gen_sensfunc():
     slf._sensfunc = arflx.generate_sensfunc(slf, 4, [specobjs], fitsdict)
     # Save
     try:
-        os.mkdir('MF_kast_blue')
+        os.mkdir('MF_shane_kast_blue')
     except FileExistsError:
         pass
     armasters.save_sensfunc(slf, 'C_01_aa')

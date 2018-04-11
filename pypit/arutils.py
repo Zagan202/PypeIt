@@ -8,13 +8,14 @@ from scipy.special import erf
 from scipy import interpolate
 import itertools
 import numpy as np
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 #from pypit import arcyutils
 #from pypit import arcyarc
 import warnings
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 from pypit import ardebug as debugger
 
@@ -35,9 +36,9 @@ def quicksave(data,fname):
     return
 
 def bspline_inner_knots(all_knots):
-    '''Trim to the inner knots.  Used in bspline_magfit
+    """Trim to the inner knots.  Used in bspline_magfit
     Might be useful elsewhere
-    '''
+    """
     diff = all_knots - np.roll(all_knots,1)
     pos = np.where(diff>0.)[0]
     i0=pos[0]
@@ -63,6 +64,8 @@ def bspline_fit(x,y,order=3,knots=None,everyn=20,xmin=None,xmax=None,w=None,bksp
       Maximum value in the array  [both must be set to normalize]
     w: ndarray, optional
       weights to be used in the fitting (weights = 1/sigma)
+    knots: ndarray, optional
+      Internal knots only.  External ones are added by scipy
     everyn: int 
       Knot everyn good pixels, if used
     bkspace: float 
@@ -91,6 +94,12 @@ def bspline_fit(x,y,order=3,knots=None,everyn=20,xmin=None,xmax=None,w=None,bksp
             nbkpts = max(int(xrnge/bkspace) + 1,2)
             tempbkspace = xrnge/(nbkpts-1)
             knots = np.arange(1, nbkpts-1)*tempbkspace + startx
+            # Remove cases where two knots have no data between them
+            keep_knots = np.array([True]*len(knots))
+            for ii in range(1,len(knots)): # Ugly for loop..
+                if not np.any((x[gd] > knots[ii-1]) & (x[gd] < knots[ii])):
+                    keep_knots[ii] = False
+            knots = knots[keep_knots]
         elif everyn is not None:
             # A knot every good N pixels
             idx_knots = np.arange(everyn//2, ngd-everyn//2, everyn)
@@ -103,9 +112,9 @@ def bspline_fit(x,y,order=3,knots=None,everyn=20,xmin=None,xmax=None,w=None,bksp
     try:
         tck = interpolate.splrep(x[gd], y[gd], w=weights, k=order, xb=xmin, xe=xmax, t=knots, task=task)
     except ValueError:
-        # Knot problem
+        # Knot problem (usually)
         msgs.warn("Problem in the bspline knot")
-        debugger.set_trace()
+        raise ValueError("Crashing out of bspline fitting")
     return tck
 
 
@@ -129,7 +138,7 @@ def calc_offset(raA, decA, raB, decB, distance=False):
         return delRA, delDEC
 
 
-def dummy_fitsdict(nfile=10, spectrograph='kast_blue', directory='./'):
+def dummy_fitsdict(nfile=10, spectrograph='shane_kast_blue', directory='./'):
     """
     Parameters
     ----------
@@ -160,7 +169,7 @@ def dummy_fitsdict(nfile=10, spectrograph='kast_blue', directory='./'):
     fitsdict["binning"] = ['1x1']*nfile
     fitsdict["airmass"] = [1.0]*nfile
     #
-    if spectrograph == 'kast_blue':
+    if spectrograph == 'shane_kast_blue':
         fitsdict['numamplifiers'] = [1] * nfile
         fitsdict['naxis0'] = [2112] * nfile
         fitsdict['naxis1'] = [2048] * nfile
@@ -210,7 +219,7 @@ def dummy_self(inum=0, fitsdict=None, nfile=10):
     return slf
 
 
-def dummy_settings(pypitdir=None, nfile=10, spectrograph='kast_blue',
+def dummy_settings(pypitdir=None, nfile=10, spectrograph='shane_kast_blue',
                    set_idx=True):
     """ Generate settings classes
     Parameters
@@ -227,7 +236,7 @@ def dummy_settings(pypitdir=None, nfile=10, spectrograph='kast_blue',
     """
     from pypit import arparse
     # Dummy argflag
-    if spectrograph != 'kast_blue':
+    if spectrograph != 'shane_kast_blue':
         msgs.error("Only setup for Kast Blue")  # You will need to fuss with scidx
     argf = arparse.get_argflag_class(("ARMLSD", spectrograph))
     argf.init_param()
@@ -248,7 +257,7 @@ def dummy_settings(pypitdir=None, nfile=10, spectrograph='kast_blue',
             if key in ['det']:
                 continue
             if 'index' in spect._spect[key].keys():
-                if spectrograph == 'kast_blue':  # Science frames from idx = 5 to 9
+                if spectrograph == 'shane_kast_blue':  # Science frames from idx = 5 to 9
                     assert nfile == 10
                 for kk in [5,6,7,8,9]:
                     if key == 'science':

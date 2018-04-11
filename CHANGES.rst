@@ -2,7 +2,7 @@
 ----------------
 
 * First major steps on ARMED echelle data reduction pipeline
-* APF/Levy and Keck/HIRES settings files generated
+* APF/Levy and Keck/HIRES implemented
 * Updates to blaze function and slit profile fitting
 * Initial support for multislit reduction
 * Coadding; including docs; and tests
@@ -21,8 +21,29 @@
 * Update Ginga hooks
 * Enable archiving/loading sensitivity function
 * Add new cosmic ray algorithms for coadding (especially pairs of spectra)
-* Removed several pieces of cython code
+* Added support for TNG+Dolores long slit spectrograph
+* Started removing cython code
+* Update line detection algorithm
+* Updated flexure and tilt tracing documentation
+* Updated docs:added standards.rst, and make a small correction in using script pypit_setup in setup.rst
+* Fixed travis
 * Updated slit trace algorithm
+* Improved arc line detection algorithm
+* Added functionality for fully automated wavelength calibration with arclines
+* Switched settings files to allow IRAF style data sections to be defined
+* Allowed data sections to be extracted from header information
+* Significant refactor of routines related to pypit_setup
+* Various small improvements, primarly to handle Gemini/GMOS data [not yet fully supported in PYPIT]
+* Removed majority of cython functionality
+* Moved logging to be a package object using the main __init__.py file
+* Begin to adhere to PEP8 (mostly)
+* setup.py rewritten.  Modeled after https://github.com/sdss/marvin/blob/master/setup.py .  Added requirements.txt with the package versions required.
+* Updates archeck
+* Loads NIST arclines from arclines instead of PYPIT
+* DEIMOS reduction!
+* Bug fix for bspline with bkspace
+* Enable loading a sensitivity function with YAML
+* Allow for multiple detectors when using `reduce detnum`
 
 0.7 (2017-02-07)
 ----------------

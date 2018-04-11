@@ -5,13 +5,14 @@ import numpy as np
 import scipy
 import glob
 
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 from pypit import arparse as settings
 
 from pypit import ardebug as debugger
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 
 def set_param(argf, specname):
@@ -22,7 +23,7 @@ def set_param(argf, specname):
     argf :
     specname : str
     """
-    if specname == 'lris_red':
+    if specname == 'keck_lris_red':
         argf.set_param('arc calibrate method arclines')
     # Return
     return

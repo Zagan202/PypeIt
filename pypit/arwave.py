@@ -11,12 +11,13 @@ from astropy import units as u
 
 from pypit import ararc
 from pypit import arextract
-from pypit import armsgs
+#from pypit import armsgs
+from pypit import msgs
 from pypit import arparse as settings
 from pypit import arutils
 
 # Logging
-msgs = armsgs.get_logger()
+#msgs = armsgs.get_logger()
 
 from pypit import ardebug as debugger
 
@@ -186,9 +187,9 @@ def flexure_archive():
     root = settings.argflag['run']['pypitdir']
     if settings.argflag['reduce']['flexure']['spectrum'] is None:
         # Red or blue?
-        if settings.argflag['run']['spectrograph'] in ['kast_blue']:
+        if settings.argflag['run']['spectrograph'] in ['shane_kast_blue']:
             skyspec_fil = 'sky_kastb_600.fits'
-        elif settings.argflag['run']['spectrograph'] in ['lris_blue']:
+        elif settings.argflag['run']['spectrograph'] in ['keck_lris_blue']:
             skyspec_fil = 'sky_LRISb_600.fits'
         else:
             skyspec_fil = 'paranal_sky.fits'

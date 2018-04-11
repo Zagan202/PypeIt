@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0ae8006a-3c06-43ab-89c2-ae897032aec4" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/../doc/deimos.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../doc/flow.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../doc/internals.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../doc/standards.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../presentations/DRWG/processed_image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../presentations/DRWG/ucsc_pypit_mar2017.odp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../presentations/DRWG/wmko_idl_mar2017.odp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../presentations/DRWG/wmko_pypit_mar2017.odp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../proposals/UCO/aastex.cls" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../proposals/UCO/enumitem.sty" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../proposals/UCO/mini_grant_2017.odp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../proposals/UCO/mini_grant_2017.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ardeimos.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/armeta.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/arsetup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-08-25.baseargflag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-08-29.dolores" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.baseargflag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.keck_hires" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.tng_dolores" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2018-04-05.armlsd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2018-04-05.baseargflag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/archive/settings.2018-04-05.keck_deimos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.apf_levy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.keck_deimos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.keck_lris_blue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.keck_lris_red" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.shane_kast_blue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.shane_kast_red" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.shane_kast_red_ret" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.tng_dolores" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/settings/settings.wht_isis_blue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/filter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/files/flux_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_armeta.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../CHANGES.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../CHANGES.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/pypit_compare_sky" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/pypit_compare_sky" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/cookbook.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/cookbook.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/flexure.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/flexure.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/fluxing.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/fluxing.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/frametype.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/frametype.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/installing.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/installing.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/instruments.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/instruments.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/scripts.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/scripts.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/setup.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/setup.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../doc/wave_calib.rst" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/wave_calib.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../proposals/UCO/apf_uco15.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../proposals/UCO/apf_uco15.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ararc.py" beforeDir="false" afterPath="$PROJECT_DIR$/ararc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ararclines.py" beforeDir="false" afterPath="$PROJECT_DIR$/ararclines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/archeck.py" beforeDir="false" afterPath="$PROJECT_DIR$/archeck.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arcoadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/arcoadd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arcomb.py" beforeDir="false" afterPath="$PROJECT_DIR$/arcomb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arcyarc.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/arcyarc.pyx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ardebug.py" beforeDir="false" afterPath="$PROJECT_DIR$/ardebug.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ardevtest.py" beforeDir="false" afterPath="$PROJECT_DIR$/ardevtest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arextract.py" beforeDir="false" afterPath="$PROJECT_DIR$/arextract.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arflux.py" beforeDir="false" afterPath="$PROJECT_DIR$/arflux.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arload.py" beforeDir="false" afterPath="$PROJECT_DIR$/arload.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arlris.py" beforeDir="false" afterPath="$PROJECT_DIR$/arlris.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/armasters.py" beforeDir="false" afterPath="$PROJECT_DIR$/armasters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/armbase.py" beforeDir="false" afterPath="$PROJECT_DIR$/armbase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/armed.py" beforeDir="false" afterPath="$PROJECT_DIR$/armed.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/armlsd.py" beforeDir="false" afterPath="$PROJECT_DIR$/armlsd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/armsgs.py" beforeDir="false" afterPath="$PROJECT_DIR$/armsgs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arparse.py" beforeDir="false" afterPath="$PROJECT_DIR$/arparse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arpca.py" beforeDir="false" afterPath="$PROJECT_DIR$/arpca.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/arplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arproc.py" beforeDir="false" afterPath="$PROJECT_DIR$/arproc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arqa.py" beforeDir="false" afterPath="$PROJECT_DIR$/arqa.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arsave.py" beforeDir="false" afterPath="$PROJECT_DIR$/arsave.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arsciexp.py" beforeDir="false" afterPath="$PROJECT_DIR$/arsciexp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arsort.py" beforeDir="false" afterPath="$PROJECT_DIR$/arsort.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arspecobj.py" beforeDir="false" afterPath="$PROJECT_DIR$/arspecobj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/artrace.py" beforeDir="false" afterPath="$PROJECT_DIR$/artrace.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/arutils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arwave.py" beforeDir="false" afterPath="$PROJECT_DIR$/arwave.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.armlsd" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/settings.armlsd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.baseargflag" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/settings.baseargflag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.isis_blue" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.wht_isis_blue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.kast_blue" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.shane_kast_blue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.kast_red" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.shane_kast_red" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.kast_red_ret" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.shane_kast_red_ret" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.keck_hires" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/settings.keck_hires" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.levy" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.apf_levy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.lris_blue" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.keck_lris_blue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.lris_red" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/archive/settings.2017-11-17.keck_lris_red" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/settings/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/standards/calspec/calspec_info.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/standards/calspec/calspec_info.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ginga.py" beforeDir="false" afterPath="$PROJECT_DIR$/ginga.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pypit.py" beforeDir="false" afterPath="$PROJECT_DIR$/pypit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyputils.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyputils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/run_pypit.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/run_pypit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/show_twod.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/show_twod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/view_fits.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/view_fits.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_ararc.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_ararc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_ararclines.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_ararclines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arcoadd.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arcoadd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arflexure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arflexure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arflux.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arflux.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arload.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arload.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_armasters.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_armasters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_armbase.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_armbase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_armlsd.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_armlsd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_armsgs.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_armsgs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arparse.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arparse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arqa.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arqa.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arsave.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arsave.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arsort.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arsort.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arspecobj.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arspecobj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arutils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arutils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_arvcorr.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_arvcorr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_datasec.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_datasec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_objfind.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_objfind.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pypit.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pypit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pyputils.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pyputils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_scripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_scripts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_setups.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_setups.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../setup.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="arproc.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/arproc.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4246">
+              <caret line="150" column="3" selection-start-line="150" selection-end-line="150" selection-end-column="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="arsciexp.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arsciexp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="10830">
+              <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="armasters.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/armasters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1950">
+              <caret line="130" column="49" selection-start-line="130" selection-start-column="49" selection-end-line="130" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#84#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="arload.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/arload.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1294">
+              <caret line="221" column="11" selection-start-line="221" selection-start-column="11" selection-end-line="221" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="artrace.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/artrace.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="16307">
+              <caret line="2914" column="37" selection-start-line="2914" selection-start-column="37" selection-end-line="2914" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plot_specdb.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../specdb/specdb/scripts/plot_specdb.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1020">
+              <caret line="68" column="16" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="479">
+              <caret line="57" selection-start-line="57" selection-end-line="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="armlsd.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/armlsd.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1980">
+              <caret line="135" column="62" selection-start-line="135" selection-start-column="62" selection-end-line="135" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>debugger</find>
+      <find>debugg</find>
+      <find>save</find>
+      <find>sensfu</find>
+      <find>save_sens</find>
+      <find>archived</find>
+      <find>trace_object</find>
+      <find>self.setmasterframe</find>
+      <find>fitsdict</find>
+      <find>standard</find>
+      <find>generate_sensfunc</find>
+      <find>masterstandard</find>
+      <find>flux</find>
+      <find>sensfunc</find>
+      <find>arparse</find>
+      <find>masterstand</find>
+      <find>key_</find>
+      <find>settn</find>
+      <find>archival</find>
+      <find>embed</find>
+      <find>u.a</find>
+      <find>slf</find>
+      <find>yaml</find>
+      <find>reduce_calib</find>
+      <find>&lt;&lt;</find>
+      <find>trace_slits</find>
+      <find>maskbadrows</find>
+      <find />
+      <find>==</find>
+      <find>===</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/arsciexp.py" />
+        <option value="$PROJECT_DIR$/arsave.py" />
+        <option value="$PROJECT_DIR$/arparse.py" />
+        <option value="$PROJECT_DIR$/armlsd.py" />
+        <option value="$PROJECT_DIR$/arflux.py" />
+        <option value="$PROJECT_DIR$/armasters.py" />
+        <option value="$PROJECT_DIR$/arload.py" />
+        <option value="$PROJECT_DIR$/artrace.py" />
+        <option value="$PROJECT_DIR$/scripts/setup.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="665" />
+    <option name="y" value="92" />
+    <option name="width" value="1713" />
+    <option name="height" value="1485" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="pypit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pypit" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pypit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pypit" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pypit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pypit" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="settings" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ae8006a-3c06-43ab-89c2-ae897032aec4" name="Default" comment="" />
+      <created>1521180517575</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1521180517575</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1343" y="81" width="1713" height="1485" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32925072" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23399162" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Data View" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/ardeimos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arproc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15450">
+          <caret line="1030" column="35" selection-start-line="1030" selection-start-column="35" selection-end-line="1030" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsciexp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10725">
+          <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armasters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1950">
+          <caret line="130" column="49" selection-start-line="129" selection-start-column="49" selection-end-line="130" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3315">
+          <caret line="221" column="11" selection-start-line="221" selection-start-column="11" selection-end-line="221" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/artrace.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25545">
+          <caret line="1703" column="22" selection-start-line="1703" selection-start-column="11" selection-end-line="1703" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armlsd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1725">
+          <caret line="135" column="62" selection-start-line="135" selection-start-column="51" selection-end-line="135" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arflux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+          <folding>
+            <element signature="e#36#120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../specdb/specdb/scripts/plot_specdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="68" column="16" lean-forward="true" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ardeimos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arproc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15450">
+          <caret line="1030" column="35" selection-start-line="1030" selection-start-column="35" selection-end-line="1030" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsciexp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10725">
+          <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armasters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1830">
+          <caret line="130" column="49" selection-start-line="129" selection-start-column="49" selection-end-line="130" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3135">
+          <caret line="221" column="11" lean-forward="true" selection-start-line="221" selection-start-column="11" selection-end-line="221" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/artrace.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25980">
+          <caret line="1732" column="26" selection-start-line="1732" selection-start-column="25" selection-end-line="1732" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arflux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="48" column="14" lean-forward="true" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+          <folding>
+            <element signature="e#36#120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armlsd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3255">
+          <caret line="237" column="17" lean-forward="true" selection-start-line="237" selection-start-column="17" selection-end-line="237" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ardeimos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsciexp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10740">
+          <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arproc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15090">
+          <caret line="1006" column="35" selection-start-line="1006" selection-start-column="23" selection-end-line="1006" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armasters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3300">
+          <caret line="227" column="28" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9120">
+          <caret line="624" selection-start-line="624" selection-end-line="624" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armlsd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3465">
+          <caret line="251" column="29" selection-start-line="251" selection-start-column="29" selection-end-line="251" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arparse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53475">
+          <caret line="3579" selection-start-line="3579" selection-end-line="3579" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arflux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="66" selection-start-line="66" selection-end-line="66" />
+          <folding>
+            <element signature="e#36#120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arproc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14790">
+          <caret line="1006" column="35" selection-start-line="1006" selection-start-column="23" selection-end-line="1006" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsciexp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10740">
+          <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armasters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3300">
+          <caret line="227" column="28" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9120">
+          <caret line="624" selection-start-line="624" selection-end-line="624" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armlsd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3465">
+          <caret line="251" column="29" selection-start-line="251" selection-start-column="29" selection-end-line="251" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arparse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53475">
+          <caret line="3579" selection-start-line="3579" selection-end-line="3579" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arflux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="66" selection-start-line="66" selection-end-line="66" />
+          <folding>
+            <element signature="e#36#120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armed.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-147">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsave.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9120">
+          <caret line="624" selection-start-line="624" selection-end-line="624" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arparse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53475">
+          <caret line="3579" selection-start-line="3579" selection-end-line="3579" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arflux.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+          <folding>
+            <element signature="e#36#120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arsciexp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10830">
+          <caret line="736" column="35" selection-start-line="736" selection-start-column="35" selection-end-line="736" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ardeimos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="26" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armasters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1950">
+          <caret line="130" column="49" selection-start-line="130" selection-start-column="49" selection-end-line="130" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armlsd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1980">
+          <caret line="135" column="62" selection-start-line="135" selection-start-column="62" selection-end-line="135" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../specdb/specdb/scripts/plot_specdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="68" column="16" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/armeta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="12" column="10" lean-forward="true" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/artrace.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16307">
+          <caret line="2914" column="37" selection-start-line="2914" selection-start-column="37" selection-end-line="2914" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1294">
+          <caret line="221" column="11" selection-start-line="221" selection-start-column="11" selection-end-line="221" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arproc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4246">
+          <caret line="150" column="3" selection-start-line="150" selection-end-line="150" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
