@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0ae8006a-3c06-43ab-89c2-ae897032aec4" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/armed.py" beforeDir="false" afterPath="$PROJECT_DIR$/armed.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/arparse.py" beforeDir="false" afterPath="$PROJECT_DIR$/arparse.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/arproc.py" beforeDir="false" afterPath="$PROJECT_DIR$/arproc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/settings/settings.xshooter_vis" beforeDir="false" afterPath="$PROJECT_DIR$/data/settings/settings.xshooter_vis" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/run_pypit.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/run_pypit.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,8 +19,8 @@
       <file leaf-file-name="arproc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/arproc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="671" column="22" selection-start-line="671" selection-start-column="22" selection-end-line="671" selection-end-column="22" />
+            <state relative-caret-position="1058">
+              <caret line="1229" lean-forward="true" selection-start-line="1229" selection-end-line="1229" />
             </state>
           </provider>
         </entry>
@@ -47,8 +46,8 @@
       <file leaf-file-name="armed.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/armed.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
-              <caret line="67" column="15" selection-start-line="67" selection-start-column="15" selection-end-line="67" selection-end-column="15" />
+            <state relative-caret-position="345">
+              <caret line="23" column="14" lean-forward="true" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
               <folding>
                 <element signature="e#65#149#0" expanded="true" />
               </folding>
@@ -59,8 +58,8 @@
       <file leaf-file-name="artrace.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/artrace.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16307">
-              <caret line="2914" column="37" selection-start-line="2914" selection-start-column="37" selection-end-line="2914" selection-end-column="37" />
+            <state relative-caret-position="822">
+              <caret line="1892" column="56" lean-forward="true" selection-start-line="1891" selection-start-column="48" selection-end-line="1892" selection-end-column="56" />
               <folding>
                 <element signature="e#0#84#0" expanded="true" />
               </folding>
@@ -71,8 +70,8 @@
       <file leaf-file-name="arparse.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/arparse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="496">
-              <caret line="2502" column="53" lean-forward="true" selection-start-line="2502" selection-start-column="19" selection-end-line="2502" selection-end-column="53" />
+            <state relative-caret-position="383">
+              <caret line="200" column="13" selection-start-line="200" selection-start-column="13" selection-end-line="200" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -108,15 +107,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>masterstandard</find>
-      <find>flux</find>
       <find>sensfunc</find>
       <find>arparse</find>
       <find>masterstand</find>
       <find>key_</find>
       <find>settn</find>
       <find>archival</find>
-      <find>embed</find>
       <find>u.a</find>
       <find>slf</find>
       <find>yaml</find>
@@ -132,12 +128,15 @@
       <find>retarr</find>
       <find>deet</find>
       <find>bg_subtraction</find>
-      <find>background_subtraction</find>
       <find>datasec</find>
       <find>det_datasec</find>
       <find>get_nmbr_name</find>
       <find>cname</find>
+      <find>def load_sections</find>
+      <find>background_subtraction</find>
+      <find>embed</find>
       <find>settings</find>
+      <find>bytes_to_native_str</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -155,8 +154,8 @@
         <option value="$PROJECT_DIR$/artrace.py" />
         <option value="$PROJECT_DIR$/scripts/setup.py" />
         <option value="$PROJECT_DIR$/scripts/run_pypit.py" />
-        <option value="$PROJECT_DIR$/armed.py" />
         <option value="$PROJECT_DIR$/arparse.py" />
+        <option value="$PROJECT_DIR$/armed.py" />
         <option value="$PROJECT_DIR$/arproc.py" />
       </list>
     </option>
@@ -168,10 +167,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="369" />
-    <option name="y" value="157" />
-    <option name="width" value="1713" />
-    <option name="height" value="1485" />
+    <option name="x" value="1900" />
+    <option name="y" value="100" />
+    <option name="width" value="1755" />
+    <option name="height" value="1327" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -246,7 +245,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="369" y="157" width="1713" height="1485" extended-state="0" />
+    <frame x="1900" y="100" width="1755" height="1327" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -256,7 +255,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23399162" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22825453" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -610,13 +609,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../specdb/specdb/scripts/plot_specdb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="68" column="16" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/armeta.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -652,10 +644,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../specdb/specdb/scripts/plot_specdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1020">
+          <caret line="68" column="16" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/artrace.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16307">
-          <caret line="2914" column="37" selection-start-line="2914" selection-start-column="37" selection-end-line="2914" selection-end-column="37" />
+        <state relative-caret-position="822">
+          <caret line="1892" column="56" lean-forward="true" selection-start-line="1891" selection-start-column="48" selection-end-line="1892" selection-end-column="56" />
           <folding>
             <element signature="e#0#84#0" expanded="true" />
           </folding>
@@ -664,15 +663,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/arparse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="2502" column="53" lean-forward="true" selection-start-line="2502" selection-start-column="19" selection-end-line="2502" selection-end-column="53" />
+        <state relative-caret-position="383">
+          <caret line="200" column="13" selection-start-line="200" selection-start-column="13" selection-end-line="200" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/armed.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" column="15" selection-start-line="67" selection-start-column="15" selection-end-line="67" selection-end-column="15" />
+        <state relative-caret-position="345">
+          <caret line="23" column="14" lean-forward="true" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
           <folding>
             <element signature="e#65#149#0" expanded="true" />
           </folding>
@@ -681,8 +680,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/arproc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="671" column="22" selection-start-line="671" selection-start-column="22" selection-end-line="671" selection-end-column="22" />
+        <state relative-caret-position="1058">
+          <caret line="1229" lean-forward="true" selection-start-line="1229" selection-end-line="1229" />
         </state>
       </provider>
     </entry>
