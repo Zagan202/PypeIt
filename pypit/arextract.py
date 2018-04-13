@@ -275,6 +275,8 @@ def obj_profiles(slf, det, specobjs, sciframe, varframe, skyframe, crmask,
             # Object pixels
             weight = objreg.copy()
             # Identify good rows
+            from IPython import embed
+            embed()
             gdrow = np.where(specobjs[sl][o].boxcar['counts'] > COUNT_LIM)[0]
             # Normalized image
             norm_img = sciframe / np.outer(specobjs[sl][o].boxcar['counts'], np.ones(sciframe.shape[1]))
