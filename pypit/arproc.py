@@ -1381,6 +1381,8 @@ def reduce_frame(slf, sciframe, rawvarframe, modelvarframe, bgframe, scidx, fits
         # to return the object model, then the last step of generating
         # the new variance image is done here.
 
+        from IPython import embed
+        embed()
         msgs.info("Attempting optimal extraction with model profile")
         arextract.obj_profiles(slf, det, specobjs, sciframe-bgframe-bgcorr_box,
                                modelvarframe, bgframe+bgcorr_box, crmask, scitrace, doqa=False)
