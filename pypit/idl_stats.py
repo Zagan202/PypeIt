@@ -12,8 +12,115 @@ import os
 import numpy as np
 import scipy.signal
 
+# from Djs_IterStat import *
+# FMean, FSig, FMedian, FMask = Djs_Iterstat(10+cos(frange(10000)/1000),RejVal=-1, SigRej=1.3)
+# mplot.plot(FMask)
+#
+############################################################
 
-def djs_iterstat(image,sigrej = 3.0,maxiter=3):
+
+def histOutline(dataIn, binsIn=None):
+    """
+    Make a histogram that can be plotted with plot() so that
+    the histogram just has the outline rather than bars as it
+    usually does.
+    """
+    if (binsIn == None):
+        (en, eb) = np.histogram(dataIn)
+        binsIn = eb
+    else:
+        (en, eb) = np.histogram(dataIn, bins=binsIn)
+
+    stepSize = binsIn[1] - binsIn[0]
+
+    bins = np.zeros(len(eb) * 2 + 2, dtype=float)
+    data = np.zeros(len(eb) * 2 + 2, dtype=float)
+    for bb in range(len(binsIn) - 1):
+        bins[2 * bb + 1] = binsIn[bb]
+        bins[2 * bb + 2] = binsIn[bb] + stepSize
+        data[2 * bb + 1] = en[bb]
+        data[2 * bb + 2] = en[bb]
+
+    bins[0] = bins[1]
+    bins[-1] = bins[-2]
+    data[0] = 0
+    data[-1] = 0
+
+    return (bins, data)
+
+
+def djs_iterstat(InputArr, SigRej=2.0, MaxIter=10, Mask=0, \
+                 Max='', Min='', RejVal='', BinData=0):
+    NGood = InputArr.size
+    ArrShape = InputArr.shape
+    if NGood == 0:
+        print
+        'No data points given'
+        return 0, 0, 0, 0, 0
+    if NGood == 1:
+        print
+        'Only one data point; cannot compute stats'
+        return 0, 0, 0, 0, 0
+
+    # Determine Max and Min
+    if Max == '':
+        Max = InputArr.max()
+    if Min == '':
+        Min = InputArr.min()
+
+    if np.unique(InputArr).size == 1:
+        return 0, 0, 0, 0, 0
+
+    Mask = np.zeros(ArrShape, dtype='byte') + 1
+    # Reject those above Max and those below Min
+    Mask[InputArr > Max] = 0
+    Mask[InputArr < Min] = 0
+    if RejVal != '':  Mask[InputArr == RejVal] = 0
+    FMean = np.sum(1. * InputArr * Mask) / NGood
+    FSig = np.sqrt(np.sum((1. * InputArr - FMean) ** 2 * Mask) / (NGood - 1))
+
+    NLast = -1
+    Iter = 0
+    NGood = np.sum(Mask)
+    if NGood < 2:
+        return -1, -1, -1, -1, -1
+
+    while (Iter < MaxIter) and (NLast != NGood) and (NGood >= 2):
+
+        LoVal = FMean - SigRej * FSig
+        HiVal = FMean + SigRej * FSig
+        NLast = NGood
+
+        Mask[InputArr < LoVal] = 0
+        Mask[InputArr > HiVal] = 0
+        NGood = np.sum(Mask)
+
+        if NGood >= 2:
+            FMean = np.sum(1. * InputArr * Mask) / NGood
+            FSig = np.sqrt(np.sum((1. * InputArr - FMean) ** 2 * Mask) / (NGood - 1))
+            SaveMask = Mask.copy()
+        else:
+            SaveMask = Mask.copy()
+
+        Iter = Iter + 1
+    if np.sum(SaveMask) > 2:
+        FMedian = np.median(InputArr[SaveMask == 1])
+        if BinData == 1:
+            HRange = InputArr[SaveMask == 1].max() - InputArr[SaveMask == 1].min()
+            bins_In = np.arange(HRange) + InputArr[SaveMask == 1].min()
+            Bins, N = histOutline(InputArr[SaveMask == 1], binsIn=bins_In)
+            FMode = Bins[(np.where(N == N.max()))[0]].mean()
+        else:
+            FMode = 0
+    else:
+        FMedian = FMean
+        FMode = FMean
+
+    return FMean, FSig, FMedian, FMode, SaveMask
+
+
+# This is another version of iterstat I found online. The other one looks superior
+def iterstat(image,sigrej = 3.0,maxiter=3):
     """ Adapted to python from djs_iterstat.pro by Schlegel,Hogg,
     Eisenstein and Rosolowsky.
     Computes the mean and sigma of data with iterative sigma.
@@ -22,7 +129,7 @@ def djs_iterstat(image,sigrej = 3.0,maxiter=3):
     IDL> djs_iterstat,[0,2,3,4,4,4,4,4,4,4,4,4,5000],mean=mean,sigma=sigma
     IDL> print,mean,sigma
           3.41667      1.24011
-    In [38]: idl_stats.djs_iterstat(np.array([0,2,3,4,4,4,4,4,4,4,4,4,5000]))
+    In [38]: idl_stats.iterstat(np.array([0,2,3,4,4,4,4,4,4,4,4,4,5000]))
     Out[38]: (3.4166666666666665, 1.2401124093721456)
     """
 
@@ -113,16 +220,16 @@ def smooth(x,window_len=11,window='hanning'):
     in the begining and end part of the output signal."""
 
     if x.ndim != 1:
-        raise ValueError, "smooth only accepts 1 dimension arrays."
+        raise ValueError('smooth only accepts 1 dimension arrays.')
 
     if x.size < window_len:
-        raise ValueError, "Input vector needs to be bigger than window size."
+        raise ValueError('Input vector needs to be bigger than window size.')
 
     if window_len<3:
         return x
 
     if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
-        raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+        raise ValueError('Window is not of flat hanning hamming bartlett or blackman')
 
 
     s=np.r_[2*x[0]-x[window_len:1:-1],x,2*x[-1]-x[-1:-window_len:-1]]
