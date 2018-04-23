@@ -122,7 +122,7 @@ def ARMLSD(fitsdict, reuseMaster=False, reloadMaster=True):
             ###############
             # Generate an array that provides the physical pixel locations on the detector
             slf.GetPixelLocations(det)
-            # Determine the edges of the spectrum (spatial)
+            # Determine the edges of the spectra (spatial)
             if ('trace'+settings.argflag['reduce']['masters']['setup'] not in settings.argflag['reduce']['masters']['loaded']):
                 ###############
                 # Determine the edges of the spectrum (spatial)
@@ -161,6 +161,12 @@ def ARMLSD(fitsdict, reuseMaster=False, reloadMaster=True):
             if update and reuseMaster:
                 armbase.UpdateMasters(sciexp, sc, det, ftype="arc", chktype="trace")
 
+            # JXP Set mask based on wv_calib -- This needs to be done somewhere else
+            mask = np.array([True]*slf._lordloc[det-1].shape[1])
+            for key in slf._wvcalib[det-1]:
+                mask[int(key)] = False
+            slf._maskslits[det-1] = mask
+
             ###############
             # Derive the spectral tilt
             if slf._tilts[det-1] is None:
@@ -171,6 +177,7 @@ def ARMLSD(fitsdict, reuseMaster=False, reloadMaster=True):
                     tilts, satmask, outpar = artrace.multislit_tilt(slf, slf._msarc[det-1], det)
                     slf.SetFrame(slf._tilts, tilts, det)
                     slf.SetFrame(slf._satmask, satmask, det)
+                    # This outpar is only the last slit!!  JXP doesn't think it matters for now
                     slf.SetFrame(slf._tiltpar, outpar, det)
                     armasters.save_masters(slf, det, mftype='tilts')
                 else:

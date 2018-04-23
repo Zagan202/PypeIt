@@ -14,7 +14,7 @@ from matplotlib import cm, font_manager
 from astropy.io import fits
 from astropy.stats import sigma_clip
 from astropy.convolution import convolve, Gaussian1DKernel
-
+from pypit import ardebug as debugger
 from pypit import msgs
 from pypit import arqa
 from pypit import arplot
@@ -41,10 +41,10 @@ except NameError:
     ustr = str
 
 # JFH debugging
-try:
-    from xastropy.xutils import xdebug as debugger
-except ImportError:
-    import pdb as debugger
+#try:
+#    from xastropy.xutils import xdebug as debugger
+#except ImportError:
+#    import pdb as debugger
 
 
 def assign_slits(binarr, edgearr, ednum=100000, lor=-1):
@@ -461,11 +461,27 @@ def trace_object_dict(nobj, traces, object=None, background=None, params=None, t
     tracelist.append(newdict)
     return tracelist
 
+def trace_objects_in_slits(slf, det, sciframe, varframe, crmask, **kwargs):
 
-def trace_object(slf, det, sciframe, varframe, crmask, trim=2,
+    nslit = len(slf._maskslits[det-1])
+    gdslits = np.where(~slf._maskslits[det-1])[0]
+    tracelist = []
+
+    for slit in range(nslit):
+        if slit not in gdslits:
+            tracelist.append({})
+            continue
+        tlist = trace_objects_in_slit(slf, det, slit, sciframe, varframe, crmask, **kwargs)
+        tracelist += tlist
+
+    # Return
+    return tracelist
+
+
+def trace_objects_in_slit(slf, det, slitn, sciframe, varframe, crmask, trim=2,
                  triml=None, trimr=None, sigmin=2.0, bgreg=None,
-                 maskval=-999999.9, slitn=0, doqa=True,
-                 xedge=0.03, tracedict=None, standard=False, debug=False):
+                 maskval=-999999.9, doqa=True,
+                 xedge=0.03, standard=False, debug=False):
     """ Finds objects, and traces their location on the detector
 
     Parameters
@@ -474,14 +490,14 @@ def trace_object(slf, det, sciframe, varframe, crmask, trim=2,
       An instance of the Science Exposure class
     det : int
       Index of the detector
+    slitn : int
+      Slit (or order) number
     sciframe: numpy ndarray
       Science frame
     varframe: numpy ndarray
       Variance frame
     crmask: numpy ndarray
       Mask or cosmic rays
-    slitn : int
-      Slit (or order) number
     trim : int (optional)
       Number of pixels to trim from the left and right slit edges.
       To separately specify how many pixels to trim from the left
@@ -500,13 +516,11 @@ def trace_object(slf, det, sciframe, varframe, crmask, trim=2,
       Trim objects within xedge % of the slit edge
     doqa : bool
       Should QA be output?
-    tracedict : list of dict
-      A list containing a trace dictionary for each slit
 
     Returns
     -------
-    tracedict : dict
-      A dictionary containing the object trace information
+    tracelist : list
+      A single item list which is a dictionary containing the object trace information
     """
     # Find the trace of each object
     tracefunc = settings.argflag['trace']['object']['function']
@@ -771,21 +785,21 @@ def trace_object(slf, det, sciframe, varframe, crmask, trim=2,
             ginga.show_trace(viewer, ch, traces[:, ii], '{:d}'.format(ii), clear=(ii == 0))
         debugger.set_trace()
     # Trace dict
-    tracedict = trace_object_dict(nobj, traces, object=rec_obj_img, background=rec_bg_img,
-                                  params=tracepar, tracelist=tracedict)
+    tracelist = trace_object_dict(nobj, traces, object=rec_obj_img, background=rec_bg_img,
+                                  params=tracepar)
 
     # Save the quality control
     if doqa: # and (not msgs._debug['no_qa']):
         objids = []
         for ii in range(nobj):
-            objid, xobj = arspecobj.get_objid(slf, det, slitn, ii, tracedict)
+            objid, xobj = arspecobj.get_objid(slf, det, slitn, ii, tracelist)
             objids.append(objid)
 #        arqa.obj_trace_qa(slf, sciframe, trobjl, trobjr, objids, det,
 #                          root="object_trace", normalize=False)
         obj_trace_qa(slf, sciframe, trobjl, trobjr, objids, det, root="object_trace",
                      normalize=False)
     # Return
-    return tracedict
+    return tracelist
 
 
 def obj_trace_qa(slf, frame, ltrace, rtrace, objids, det,
@@ -2828,12 +2842,12 @@ def trace_tilt(slf, det, msarc, slitnum, censpec=None, maskval=-999999.9,
             xtfit[sz-k] = ordcen[arcdet[j], slitnum] - k
             ytfit[sz-k] = centv
             etfit[sz-k] = 0.02
-            from IPython import embed
             #apfit[sz-k] = params[0]
             if fail:
                 mtfit[sz-k] = 1
             else:
-                if np.isfinite(centv) == False: embed()
+                #from IPython import embed
+                if np.isfinite(centv) is False: debugger.set_trace() #embed()
                 pcen = int(0.5 + centv)
                 mtfit[sz-k] = 0
         '''
@@ -3221,15 +3235,29 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
     ordcen = slf._pixcen[det - 1].copy()
     fitxy = [settings.argflag['trace']['slits']['tilts']['order'], 1]
 
+    # maskslit
+    if slf._maskslits[det-1] is not None:
+        mask = slf._maskslits[det-1] & (maskslit==1)
+    else:
+        mask = maskslit
+    slf._maskslits[det-1] = mask
+    gdslits = np.where(mask == 0)[0]
+
+    # Final tilts image
+    final_tilts = np.zeros_like(msarc)
+
     # Now trace the tilt for each slit
-    for o in range(arccen.shape[1]):
+    #for  o in range(arccen.shape[1]):
+    for oo, slit in enumerate(gdslits):
+        if oo > 3:
+            continue
         # Determine the tilts for this slit
-        trcdict = trace_tilt(slf, det, msarc, o, censpec=arccen[:, o], nsmth=3)
+        trcdict = trace_tilt(slf, det, msarc, slit, censpec=arccen[:, oo], nsmth=3)
         if trcdict is None:
             # No arc lines were available to determine the spectral tilt
             continue
         if msgs._debug['tilts']:
-            debugger.chk_arc_tilts(msarc, trcdict, sedges=(slf._lordloc[det-1][:,o], slf._rordloc[det-1][:,o]))
+            debugger.chk_arc_tilts(msarc, trcdict, sedges=(slf._lordloc[det-1][:,slit], slf._rordloc[det-1][:,slit]))
             debugger.set_trace()
         # Extract information from the trace dictionary
         aduse = trcdict["aduse"]
@@ -3290,7 +3318,7 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
             wmask = wmask[np.where(wmsk == 0)]
 
             # Save the tilt angle, and unmask the row
-            factr = (msarc.shape[0] - 1.0) * arutils.func_val(mcoeff, ordcen[arcdet[j], 0],
+            factr = (msarc.shape[0] - 1.0) * arutils.func_val(mcoeff, ordcen[arcdet[j], slit],
                                                               settings.argflag['trace']['slits']['function'],
                                                               minv=0.0, maxv=msarc.shape[1] - 1.0)
             idx = int(factr + 0.5)
@@ -3374,7 +3402,7 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
             xspl = np.linspace(0.0, 1.0, msarc.shape[1])
             # yspl = np.append(0.0, np.append(arcdet[np.where(aduse)]/(msarc.shape[0]-1.0), 1.0))
             # yspl = np.append(0.0, np.append(polytilts[arcdet[np.where(aduse)], msarc.shape[1]/2], 1.0))
-            ycen = np.diag(polytilts[arcdet[np.where(aduse)], ordcen[arcdet[np.where(aduse)]]])
+            ycen = np.diag(polytilts[arcdet[np.where(aduse)], ordcen[arcdet[np.where(aduse), slit]]])
             yspl = np.append(0.0, np.append(ycen, 1.0))
             zspl = np.zeros((msarc.shape[1], np.sum(aduse) + 2))
             zspl[:, 1:-1] = mtilt[:, np.where(aduse)[0]]
@@ -3382,8 +3410,8 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
             zspl[:, 0] = zspl[:, 1] + polytilts[0, :] - polytilts[arcdet[np.where(aduse)[0][0]], :]
             zspl[:, -1] = zspl[:, -2] + polytilts[-1, :] - polytilts[arcdet[np.where(aduse)[0][-1]], :]
             # Make sure the endpoints are set to 0.0 and 1.0
-            zspl[:, 0] -= zspl[ordcen[0, 0], 0]
-            zspl[:, -1] = zspl[:, -1] - zspl[ordcen[-1, 0], -1] + 1.0
+            zspl[:, 0] -= zspl[ordcen[0, 0], slit]
+            zspl[:, -1] = zspl[:, -1] - zspl[ordcen[-1, slit], -1] + 1.0
             # Prepare the spline variables
             # if False:
             #     pmin = 0
@@ -3439,7 +3467,7 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
             # Slit position
             xspl = np.linspace(0.0, 1.0, msarc.shape[1])
             # Trace positions down center of the order
-            ycen = np.diag(polytilts[arcdet[np.where(aduse)], ordcen[arcdet[np.where(aduse)]]])
+            ycen = np.diag(polytilts[arcdet[np.where(aduse)], ordcen[arcdet[np.where(aduse)], slit:slit+1]])
             yspl = np.append(0.0, np.append(ycen, 1.0))
             # Trace positions as measured+modeled
             zspl = np.zeros((msarc.shape[1], np.sum(aduse) + 2))
@@ -3447,8 +3475,8 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
             zspl[:, 0] = zspl[:, 1] + polytilts[0, :] - polytilts[arcdet[np.where(aduse)[0][0]], :]
             zspl[:, -1] = zspl[:, -2] + polytilts[-1, :] - polytilts[arcdet[np.where(aduse)[0][-1]], :]
             # Make sure the endpoints are set to 0.0 and 1.0
-            zspl[:, 0] -= zspl[ordcen[0, 0], 0]
-            zspl[:, -1] = zspl[:, -1] - zspl[ordcen[-1, 0], -1] + 1.0
+            zspl[:, 0] -= zspl[ordcen[0, slit], 0]
+            zspl[:, -1] = zspl[:, -1] - zspl[ordcen[-1, slit], -1] + 1.0
             # Prepare the spline variables
             if False:
                 pmin = 0
@@ -3476,50 +3504,65 @@ def multislit_tilt(slf, msarc, det, maskval=-999999.9):
                 debugger.set_trace()
         elif settings.argflag['trace']['slits']['tilts']['method'].lower() == "pca":
             tilts = polytilts.copy()
+        # Save into final_tilts
+        word = np.where(slf._slitpix[det - 1] == slit+1)
+        final_tilts[word] = tilts[word]
 
-    # Now do the QA
-    msgs.info("Preparing arc tilt QA data")
-    tiltsplot = tilts[arcdet, :].T
-    tiltsplot *= (msarc.shape[0] - 1.0)
-    # Shift the plotted tilts about the centre of the slit
-    ztilto = ztilt.copy()
-    adj = np.diag(tilts[arcdet, ordcen[arcdet]])
-    zmsk = np.where(ztilto == maskval)
-    ztilto = 2.0 * np.outer(np.ones(ztilto.shape[0]), adj) - ztilto
-    ztilto[zmsk] = maskval
-    ztilto[np.where(ztilto != maskval)] *= (msarc.shape[0] - 1.0)
-    for i in range(arcdet.size):
-        w = np.where(ztilto[:, i] != maskval)
-        if w[0].size != 0:
-            twa = (xtilt[w[0], i] * (msarc.shape[1] - 1.0) + 0.5).astype(np.int)
-            # fitcns = np.polyfit(w[0], ztilt[w[0], i] - tiltsplot[twa, i], 0)[0]
-            fitcns = np.median(ztilto[w[0], i] - tiltsplot[twa, i])
-            # if abs(fitcns) > 1.0:
-            #     msgs.warn("The tilt of Arc Line {0:d} might be poorly traced".format(i+1))
-            tiltsplot[:, i] += fitcns
+        # Now do the QA
+        if False:
+            msgs.info("Preparing arc tilt QA data")
+            tiltsplot = tilts[arcdet, :].T
+            tiltsplot *= (msarc.shape[0] - 1.0)
+            # Shift the plotted tilts about the centre of the slit
+            ztilto = ztilt.copy()
+            adj = np.diag(tilts[arcdet, ordcen[arcdet]])
+            zmsk = np.where(ztilto == maskval)
+            ztilto = 2.0 * np.outer(np.ones(ztilto.shape[0]), adj) - ztilto
+            ztilto[zmsk] = maskval
+            ztilto[np.where(ztilto != maskval)] *= (msarc.shape[0] - 1.0)
+            for i in range(arcdet.size):
+                w = np.where(ztilto[:, i] != maskval)
+                if w[0].size != 0:
+                    twa = (xtilt[w[0], i] * (msarc.shape[1] - 1.0) + 0.5).astype(np.int)
+                    # fitcns = np.polyfit(w[0], ztilt[w[0], i] - tiltsplot[twa, i], 0)[0]
+                    fitcns = np.median(ztilto[w[0], i] - tiltsplot[twa, i])
+                    # if abs(fitcns) > 1.0:
+                    #     msgs.warn("The tilt of Arc Line {0:d} might be poorly traced".format(i+1))
+                    tiltsplot[:, i] += fitcns
 
-    xdat = xtilt.copy()
-    xdat[np.where(xdat != maskval)] *= (msarc.shape[1] - 1.0)
+            xdat = xtilt.copy()
+            xdat[np.where(xdat != maskval)] *= (msarc.shape[1] - 1.0)
 
-    msgs.info("Plotting arc tilt QA")
-#    arqa.plot_orderfits(slf, tiltsplot, ztilto, xdata=xdat, xmodl=np.arange(msarc.shape[1]),
-#                        textplt="Arc line", maxp=9, desc="Arc line spectral tilts", maskval=maskval)
-    plot_orderfits(slf, tiltsplot, ztilto, xdata=xdat, xmodl=np.arange(msarc.shape[1]),
-                   textplt="Arc line", maxp=9, desc="Arc line spectral tilts", maskval=maskval)
-    return tilts, satmask, outpar
+            msgs.info("Plotting arc tilt QA")
+        #    arqa.plot_orderfits(slf, tiltsplot, ztilto, xdata=xdat, xmodl=np.arange(msarc.shape[1]),
+        #                        textplt="Arc line", maxp=9, desc="Arc line spectral tilts", maskval=maskval)
+            plot_orderfits(slf, tiltsplot, ztilto, xdata=xdat, xmodl=np.arange(msarc.shape[1]),
+                           textplt="Arc line", maxp=9, desc="Arc line spectral tilts", maskval=maskval)
+    return final_tilts, satmask, outpar
 
 
 def get_censpec(slf, frame, det, gen_satmask=False):
-    """
-    The value of "tilts" returned by this function is of the form:
-    tilts = tan(tilt angle), where "tilt angle" is the angle between
-    (1) the line representing constant wavelength and
-    (2) the column of pixels that is most closely parallel with the spatial direction of the slit.
+    """ Extract a simple spectrum down the center of each slit
+    Parameters
+    ----------
+    slf :
+    frame : ndarray
+      Image
+    det : int
+    gen_satmask : bool, optional
+      Generate a saturation mask?
 
-    The angle is determined relative to the axis defined by ...
-
-    In other words, tilts = y/x according to the docs/get_locations_orderlength.JPG file.
-
+    Returns
+    -------
+    arccen : ndarray
+      Extracted arcs.  This *need* not be one per slit/order,
+      although I wish it were (with `rejected` ones padded with zeros)
+    maskslit : bool array
+      1 = Bad slit/order for extraction (incomplete)
+      0 = Ok
+    satmask : ndarray, optional
+      Saturation mask
+      Returned in gen_satmask=True
     """
     dnum = settings.get_dnum(det)
 
