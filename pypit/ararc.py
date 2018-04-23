@@ -70,6 +70,7 @@ def detect_lines(slf, det, msarc, censpec=None, MK_SATMASK=False):
         op2 = ordcen+2
         om1 = ordcen-1
         om2 = ordcen-2
+        # TODO This is a silly way to extract an arc. This should be done with a boxcar extraction.
         censpec = (msarc[:,ordcen]+msarc[:,op1]+msarc[:,op2]+msarc[:,om1]+msarc[:,om2])/5.0
     # Generate a saturation mask
     if MK_SATMASK:

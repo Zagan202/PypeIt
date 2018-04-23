@@ -127,6 +127,8 @@ def ARMLSD(fitsdict, reuseMaster=False, reloadMaster=True):
                 ###############
                 # Determine the edges of the spectrum (spatial)
                 lordloc, rordloc, extord = artrace.trace_slits(slf, slf._mstrace[det-1], det, pcadesc="PCA trace of the slit edges")
+                from IPython import embed
+                embed()
                 slf.SetFrame(slf._lordloc, lordloc, det)
                 slf.SetFrame(slf._rordloc, rordloc, det)
 

@@ -170,6 +170,8 @@ def ARMED(fitsdict, reuseMaster=False, reloadMaster=True):
 
             ###############
             # Generate the 1D wavelength solution
+            from IPython import embed
+            embed()
             update = slf.MasterWaveCalib(fitsdict, sc, det)
             if update and reuseMaster:
                 armbase.UpdateMasters(sciexp, sc, det, ftype="arc", chktype="trace")
