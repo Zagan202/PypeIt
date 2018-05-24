@@ -386,6 +386,7 @@ settings trace slits tilts params 1,1,1
 settings trace slits tilts method spca
 settings trace slits pca params [3,2,1,0]
 settings trace slits polyorder  3
+settings trace slits fracignore
 settings trace slits sobel mode nearest
 settings bias useframe overscan
 settings pixelflat combine method median

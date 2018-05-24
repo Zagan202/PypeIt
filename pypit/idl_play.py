@@ -16,6 +16,8 @@ from astropy.stats import sigma_clipped_stats
 from pydl.pydlutils.math import djs_median
 from pydl.pydlutils.bspline import iterfit as bspline_iterfit
 
+## Directory for IDL tests is /Users/joe/gprofile_develop/
+
 path = '/Users/joe/REDUX/lris_redux/May_2008/0938+5317/Blue1200/'
 
 # slitfile

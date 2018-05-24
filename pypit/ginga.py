@@ -18,7 +18,7 @@ from ginga.util import grc
 
 from astropy.io import fits
 
-from pypit import msgs
+#from pypit import armsgs
 
 # TODO: There needs to be a way to call show_image() without importing
 # arlris, requires a code refactor
