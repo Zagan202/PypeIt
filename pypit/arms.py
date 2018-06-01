@@ -119,6 +119,7 @@ def ARMS(fitstbl, setup_dict, reuseMaster=False, reloadMaster=True, sciexp=None)
                 settings.argflag['run']['spectrograph'], scifile, namp, det, settings_det,
                 naxis0=fitstbl['naxis0'][scidx],
                 naxis1=fitstbl['naxis1'][scidx])
+            settings.spect[dnum] = settings_det.copy()  # Kludge back
             # Yes, this looks goofy.  Is needed for LRIS and DEIMOS for now
             fitstbl['naxis0'][scidx] = naxis0
             fitstbl['naxis1'][scidx] = naxis1
@@ -288,8 +289,8 @@ def ARMS(fitstbl, setup_dict, reuseMaster=False, reloadMaster=True, sciexp=None)
                                      masters=settings.argflag['reduce']['masters'])
                 tilt_settings['tilts']['function'] = settings.argflag['trace']['slits']['function']
                 tilt_settings['masters']['directory'] = settings.argflag['run']['directory']['master']+'_'+ settings.argflag['run']['spectrograph']
-                settings_det = {}
-                settings_det[dnum] = settings.spect[dnum].copy()
+                #settings_det = {}
+                #settings_det[dnum] = settings.spect[dnum].copy()
                 # Instantiate
                 wTilt = wavetilts.WaveTilts(msarc, settings=tilt_settings, det=det, setup=setup,
                                             lordloc=Tslits.lcen, rordloc=Tslits.rcen,
