@@ -212,7 +212,7 @@ def html_mf_pngs(setup, cbset, det):
                                href='blaze', label='Blaze', slit=False)
     html_dict['arc_fit'] = dict(fname='arc_fit_qa', ext='',
                               href='arc_fit', label='Arc 1D Fit', slit=True)
-    html_dict['arc_tilt'] = dict(fname='plot_orderfits_Arc', ext='*.png',
+    html_dict['arc_tilt'] = dict(fname='plot_tiltres', ext='',
                               href='arc_tilts', label='Arc Tilts', slit=True)
     html_dict['arc_pca'] = dict(fname='pca_arctilt', ext='*.png',
                                  href='arc_pca', label='Arc Tilt PCA', slit=False)
@@ -223,6 +223,8 @@ def html_mf_pngs(setup, cbset, det):
         if html_dict[key]['slit']:  # Kludge to handle multiple slits
             png_root = png_root.replace('S9999', 'S*')
         pngs = glob.glob(png_root+html_dict[key]['ext'])
+        if key == 'arc_fit':
+            import pdb; pdb.set_trace()
         if len(pngs) > 0:
             href="{:s}_{:s}".format(html_dict[key]['href'], idval)
             # Link
