@@ -87,6 +87,7 @@ trace slits diffpolyorder  2         # What is the order of the 2D function that
 trace slits expand False             # If you trace the slits with a pinhole frame, you should expand the trace edges to the slit edges defined by the trace frame
 trace slits fracignore 0.01           # If an order spans less than this fraction over the detector, it will be reconstructed and not fitted
 trace slits function    legendre      # What function should be used to trace each order? (polynomial, legendre, chebyshev)
+trace slits insertbuff 5            # Buffer when adding a missing left/right slit
 trace slits maxgap    None          # Maximum gap between slits (None if slits are far apart, or of similar illumination)
 trace slits number      auto          # Manually set the number of slits to identify (>=1). 'auto' or -1 will automatically identify the number of slits.
 trace slits pad 0                     # Number of pixels to consider beyond the slit edges
@@ -97,6 +98,8 @@ trace slits pca extrapolate neg     0             # How many extra orders to pre
 trace slits polyorder  3             # What is the order of the function that should be used?
 trace slits sigdetect  20.0           # Sigma detection threshold for edge detection
 trace slits single []                # Pixel location(s) of left and right edges of trace [left_det01, right_det01], or [[left_det01,right_det01,left_det02,right_det02]]
+trace slits addslits []                # Info to add a slit [[det, left, right, yval]]
+trace slits fluxmax 0.                # Maximum median flux in a slit;  Anything higher is removed as a alignment box
 trace slits sobel mode nearest       # Filtering mode for Sobel (options are: nearest, constant)
 trace slits tilts idsonly False       # Use only the arc lines that have an identified wavelength to trace tilts
 trace slits tilts method      spline        # What method should be used to trace the tilt of the slit along an order (PCA, spca, spline, interp, perp, zero)

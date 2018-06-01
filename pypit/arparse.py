@@ -1801,6 +1801,18 @@ class BaseArgFlag(BaseFunctions):
             msgs.error("The argument of {0:s} must be <1 and >= 0".format(get_current_name()))
         self.update(v)
 
+    def trace_slits_addslits(self, v):
+        """ Parameters to add slits
+        [det, x0, x1, yrow]
+
+        Parameters
+        ----------
+        v : str
+          value of the keyword argument given by the name of this function
+        """
+        v = key_list(v)
+        self.update(v)
+
     def trace_slits_diffpolyorder(self, v):
         """ What is the order of the 2D function that should be used to fit
         the 2D solution for the spatial size of all slits?
@@ -1829,6 +1841,20 @@ class BaseArgFlag(BaseFunctions):
         v = key_bool(v)
         self.update(v)
 
+    def trace_slits_fluxmax(self, v):
+        """ Ignore slits with median flux above this value,
+        they are assumed to be alignment boxes
+
+        Parameters
+        ----------
+        v : str
+          value of the keyword argument given by the name of this function
+        """
+        v = key_float(v)
+        if v < 0.0:
+            msgs.error("The argument of {0:s} must be 0 or larger".format(get_current_name()))
+        self.update(v)
+
     def trace_slits_fracignore(self, v):
         """ If a slit spans less than this fraction over the spectral size of the detector,
         it will be ignored (and reconstructed when/if an 'order' PCA analysis is performed).
@@ -1853,6 +1879,17 @@ class BaseArgFlag(BaseFunctions):
         """
         allowed = ['polynomial', 'legendre', 'chebyshev']
         v = key_allowed(v, allowed)
+        self.update(v)
+
+    def trace_slits_insertbuff(self, v):
+        """ How much do we buffer added slits?
+
+        Parameters
+        ----------
+        v : str
+          value of the keyword argument given by the name of this function
+        """
+        v = key_int(v)
         self.update(v)
 
     def trace_slits_maxgap(self, v):

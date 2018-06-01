@@ -38,6 +38,7 @@ default_settings = dict(trace={'slits': {'single': [],
                                'polyorder': 3,
                                'diffpolyorder': 2,
                                'fracignore': 0.01,
+                               'insertbuff': 5,
                                'medrep': 0,
                                'number': -1,
                                'maxgap': None,
@@ -594,7 +595,8 @@ class TraceSlits(masterframe.MasterFrame):
 
         """
         #
-        self.edgearr = artraceslits.edgearr_mslit_sync(self.edgearr, self.tc_dict, self.ednum)
+        self.edgearr = artraceslits.edgearr_mslit_sync(self.edgearr, self.tc_dict, self.ednum,
+                                                       insert_buff=self.settings['trace']['slits']['insertbuff'])
         # Step
         self.steps.append(inspect.stack()[0][3])
 
@@ -794,6 +796,14 @@ class TraceSlits(masterframe.MasterFrame):
                 if np.median(self.rcen[:,o]-self.lcen[:,o]) < fracpix:
                     mask[o] = 1
                     msgs.info("Slit {0:d} is less than fracignore - ignoring this slit".format(o + 1))
+            if self.settings['trace']['slits']['fluxmax'] > 0.:
+                ordloc = arpixels.new_locate_order(self.lcen[:,o], self.rcen[:,o],
+                                                   self.mstrace.shape[0], self.mstrace.shape[1],
+                                                   self.settings['trace']['slits']['pad'])
+                if np.median(self.mstrace[ordloc==1]) > self.settings['trace']['slits']['fluxmax']:
+                    mask[o] = 1
+                    msgs.info("Slit {0:d} has flux exceeding fluxmax - ignoring this alignment box".format(o + 1))
+
         # Trim
         wok = np.where(mask == 0)[0]
         self.lcen = self.lcen[:, wok]
@@ -939,7 +949,7 @@ class TraceSlits(masterframe.MasterFrame):
         return loaded
 
 
-    def run(self, armlsd=True, ignore_orders=False, add_user_slits=None):
+    def run(self, armlsd=True, ignore_orders=False):
         """ Main driver for tracing slits.
 
           Code flow
@@ -955,7 +965,8 @@ class TraceSlits(masterframe.MasterFrame):
            6.  Fit left/right slits
            7.  Synchronize
            8.  Extrapolate into blank regions (PCA)
-           9.  Perform pixel-level calculations
+           9.  Remove alignment boxes with fluxmax, if input
+           10.  Perform pixel-level calculations
 
         Parameters
         ----------
@@ -963,9 +974,6 @@ class TraceSlits(masterframe.MasterFrame):
           Running longslit or multi-slit?
         ignore_orders : bool (optional)
           Perform ignore_orders algorithm (recommended only for echelle data)
-        add_user_slits : list of lists
-          List of 2 element lists, each an [xleft, xright] pair specifying a slit edge
-          These are specified at mstrace.shape[0]//2
 
         Returns
         -------
@@ -1019,9 +1027,17 @@ class TraceSlits(masterframe.MasterFrame):
             # Synchronize and add in edges
             self._mslit_sync()
 
-        # Add user input slits
-        if add_user_slits is not None:
-            self.add_user_slits(add_user_slits)
+        # Add user input slits?
+        if len(self.settings['trace']['slits']['addslits']) > 0:
+            all_addslits = np.array(self.settings['trace']['slits']['addslits']).astype(int)
+            addslits = []
+            # Grab all the ones for this detector
+            for kk in range(0,len(all_addslits),4):
+                if all_addslits[kk] == self.det:
+                    addslits.append(all_addslits[kk+1:kk+4].tolist())
+            # Run
+            if len(addslits) > 0:
+                self.add_user_slits(addslits)
 
         # Ignore orders/slits on the edge of the detector when they run off
         #    Recommended for Echelle only

@@ -51,7 +51,7 @@ def add_user_edges(edgearr, siglev, tc_dict, add_slits):
     edgearr
     siglev
     tc_dict
-    add_slits
+    add_slits : list of lists
 
     Returns
     -------
