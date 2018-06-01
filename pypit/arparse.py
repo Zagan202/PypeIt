@@ -1813,6 +1813,18 @@ class BaseArgFlag(BaseFunctions):
         v = key_list(v)
         self.update(v)
 
+    def trace_slits_rmslits(self, v):
+        """ Parameters to add slits
+        [det, x0, x1, det, x0b, x1b, ...]
+
+        Parameters
+        ----------
+        v : str
+          value of the keyword argument given by the name of this function
+        """
+        v = key_list(v)
+        self.update(v)
+
     def trace_slits_diffpolyorder(self, v):
         """ What is the order of the 2D function that should be used to fit
         the 2D solution for the spatial size of all slits?

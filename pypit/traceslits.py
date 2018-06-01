@@ -1066,6 +1066,18 @@ class TraceSlits(masterframe.MasterFrame):
             #   Also remove short slits here for multi-slit and long-slit (aligntment stars)
             self._trim_slits(usefracpix=armlsd)
 
+        # Remove slits?
+        if len(self.settings['trace']['slits']['rmslits']) > 0:
+            all_rmslits = np.array(self.settings['trace']['slits']['rmslits']).astype(int)
+            rmslits = []
+            # Grab all the ones for this detector
+            for kk in range(0,len(all_rmslits),3):
+                if all_rmslits[kk] == self.det:
+                    rmslits.append(all_rmslits[kk+1:kk+3].tolist())
+            # Run
+            if len(rmslits) > 0:
+                self.remove_slit(rmslits)
+
         # Generate pixel arrays
         self._make_pixel_arrays()
 
