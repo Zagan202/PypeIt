@@ -789,6 +789,7 @@ def arc_fit_qa(setup, fit, slit, outfile=None, ids_only=False, title=None):
     fit : Wavelength fit
     arc_spec : ndarray
       Arc spectrum
+    slit : int
     outfile : str, optional
       Name of output file
       or 'show' to show on screen
@@ -834,6 +835,9 @@ def arc_fit_qa(setup, fit, slit, outfile=None, ids_only=False, title=None):
     ax_spec.set_ylim(ymin, ymax*1.2)
     ax_spec.set_xlabel('Pixel')
     ax_spec.set_ylabel('Flux')
+    if slit is not None:
+        ax_spec.text(0.1, 0.90, 'Slit={:d}'.format(slit), size='small',
+                     transform=ax_spec.transAxes, ha='left')
     if title is not None:
         ax_spec.text(0.04, 0.93, title, transform=ax_spec.transAxes,
                      size='x-large', ha='left')#, bbox={'facecolor':'white'})

@@ -226,6 +226,7 @@ def html_mf_pngs(setup, cbset, det):
         if key == 'arc_fit':
             import pdb; pdb.set_trace()
         if len(pngs) > 0:
+            pngs.sort()
             href="{:s}_{:s}".format(html_dict[key]['href'], idval)
             # Link
             links += '<li><a class="reference internal" href="#{:s}">{:s} {:s}</a></li>\n'.format(href, html_dict[key]['label'], idval)
