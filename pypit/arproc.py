@@ -206,9 +206,11 @@ def bg_subtraction_slit(slf, det, slit, tilts, sciframe, varframe, bpix, crpix, 
 #                                     slf._lordloc[det-1]*0.05+slf._rordloc[det-1]*0.95)
 #    print('Old order_pixels: {0} seconds'.format(time.clock() - t))
 #    t = time.clock()
+    trim_frac = 0.15
     ordpix = new_order_pixels(slf._pixlocn[det-1],
-                              slf._lordloc[det-1]*0.95+slf._rordloc[det-1]*0.05,
-                              slf._lordloc[det-1]*0.05+slf._rordloc[det-1]*0.95)
+                              slf._lordloc[det-1]*(1-trim_frac)+slf._rordloc[det-1]*trim_frac,
+                              slf._lordloc[det-1]*trim_frac+slf._rordloc[det-1]*(1-trim_frac))
+    sv_ord = ordpix.copy()
 #    print('New order_pixels: {0} seconds'.format(time.clock() - t))
 #    assert np.sum(_ordpix != ordpix) == 0, \
 #                    'Difference between old and new order_pixels'
@@ -312,16 +314,24 @@ def bg_subtraction_slit(slf, det, slit, tilts, sciframe, varframe, bpix, crpix, 
         mask, bspl = arutils.robust_polyfit(tilts[gdp][srt], scifrcp[gdp][srt], 3,
                                             function='bspline',
                                             weights=np.sqrt(ivar)[gdp][srt],
-                                            sigma=5., maxone=False,
-                                            bspline_par=settings.argflag['reduce']['skysub']['bspline'])
+                                            sigma=5., maxone=False, bspline_par=settings.argflag['reduce']['skysub']['bspline'])
         # Just those in the slit
         in_slit = np.where(slf._slitpix[det-1] == slit+1)
         bgf_flat = arutils.func_val(bspl, tilts[in_slit].flatten(), 'bspline')
         #bgframe = bgf_flat.reshape(tilts.shape)
         bgframe[in_slit] = bgf_flat
-        if msgs._debug['sky_sub']:
-            plt_bspline_sky(tilts, scifrcp, bgf_flat, in_slit, gdp)
+        if slit==2:  #msgs._debug['sky_sub']:
+            plt_bspline_sky(tilts, scifrcp, bgf_flat, in_slit, gdp, bspl=bspl)
+            # Make a FITS file for Qiong
+            from astropy.table import Table
+            tbl = Table()
+            tbl['tilts'] = tilts[gdp][srt]
+            tbl['counts'] = scifrcp[gdp][srt]
+            tbl['weights'] = np.sqrt(ivar)[gdp][srt]
             debugger.set_trace()
+            tmp = scifrcp.copy()
+            gdp2 = (scifrcp != maskval) & (sv_ord == slit+1) & (varframe > 0.)
+            tmp[~gdp2] = -999.
     else:
         msgs.error('Not ready for this method for skysub {:s}'.format(
                 settings.argflag['reduce']['skysub']['method'].lower()))
@@ -1070,7 +1080,7 @@ def new_order_pixels(pixlocn, lord, rord):
     return outfr
 
 
-def plt_bspline_sky(tilts, scifrcp, bgf_flat, inslit, gdp):
+def plt_bspline_sky(tilts, scifrcp, bgf_flat, inslit, gdp, bspl=None):
     # Setup
     srt = np.argsort(tilts[inslit].flatten())
     # Plot
@@ -1079,6 +1089,11 @@ def plt_bspline_sky(tilts, scifrcp, bgf_flat, inslit, gdp):
     ax = plt.gca()
     ax.scatter(tilts[gdp]*tilts.shape[0], scifrcp[gdp], marker='o')
     ax.plot(tilts[inslit].flatten()[srt]*tilts.shape[0], bgf_flat[srt], 'r-')
+    # Show the knots
+    if bspl is not None:
+        xval = bspl[0]*(tilts.shape[0]-1)
+        yval = bspl[1]
+        ax.scatter(xval, yval, marker='*', color='r')
     plt.show()
 
 
