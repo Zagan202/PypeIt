@@ -23,6 +23,8 @@ def parser(options=None):
     parser.add_argument('root', type = str, default = None, help='PYPIT Master Trace file root [e.g. MasterTrace_A_01_aa]')
     parser.add_argument("--chname", default='MTrace', type=str, help="Channel name for image in Ginga")
     parser.add_argument("--dumb_ids", default=False, action="store_true", help="Slit ID just by order?")
+    parser.add_argument("--image_file", type=str, help="Show edges on a separate image")
+    parser.add_argument("--image_ext", type=int, default=0, help="Image extenstion")
 
     if options is None:
         args = parser.parse_args()
@@ -35,6 +37,8 @@ def main(pargs):
 
     import pdb as debugger
     import time
+
+    from astropy.io import fits
 
     from pypit import ginga
     from pypit import traceslits
@@ -52,7 +56,12 @@ def main(pargs):
         time.sleep(3)
 
     # Show Image
-    viewer, ch = ginga.show_image(Tslits.mstrace, chname=pargs.chname)
+    if pargs.image_file is None:
+        image = Tslits.mstrace
+    else:
+        image = fits.open(pargs.image_file)[pargs.image_ext].data
+
+    viewer, ch = ginga.show_image(image, chname=pargs.chname)
 
     # Get slit ids
     stup = (Tslits.mstrace.shape, Tslits.lcen, Tslits.rcen)
