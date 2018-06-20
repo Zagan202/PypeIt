@@ -21,22 +21,31 @@ if msgs._debug is None:
 
 frametype = 'wave'
 
-default_settings = dict() #calibrate={'nfitpix': 5,
+default_settings = dict()
 
 
 class WaveImage(masterframe.MasterFrame):
-    """Class to guide slit/order tracing
+    """Class to generate the Wavelength Image
 
     Parameters
     ----------
-    mstrace : ndarray
-      Trace image
-      Edge number used for indexing
+    tilts : ndarray
+      Tilt image
+    wv_calib : dict
+      1D wavelength solutions
+    settings : dict
+    setup : str
+    maskslits : ndarray
+      True = skip this slit
+    slitpix : ndarray
+      Specifies locations of pixels in the slits
 
     Attributes
     ----------
     frametype : str
-      Hard-coded to 'wv_calib'
+      Hard-coded to 'wave'
+    wave : ndarray
+      Wavelength image
 
     steps : list
       List of the processing steps performed
@@ -67,6 +76,15 @@ class WaveImage(masterframe.MasterFrame):
         masterframe.MasterFrame.__init__(self, self.frametype, setup, self.settings)
 
     def _build_wave(self):
+        """
+        Main algorithm to build the wavelength image
+
+        Returns
+        -------
+        self.wave : ndarray
+          Wavelength image
+
+        """
         # Loop on slits
         ok_slits = np.where(~self.maskslits)[0]
         self.wave = np.zeros_like(self.tilts)
@@ -82,9 +100,22 @@ class WaveImage(masterframe.MasterFrame):
         return self.wave
 
     def show(self, item):
+        """
+        Show the image
+
+        Parameters
+        ----------
+        item
+
+        Returns
+        -------
+
+        """
         if item == 'wave':
             if self.wave is not None:
                 ginga.show_image(self.wave)
+        else:
+            msgs.warn("Not able to show this type of image")
 
     def __repr__(self):
         # Generate sets string
@@ -92,4 +123,41 @@ class WaveImage(masterframe.MasterFrame):
         return txt
 
 
+def get_mswave(setup, tslits_dict, wvimg_settings, mstilts, wv_calib, maskslits):
+    """
+    Load/Generate the wavelength image
 
+
+    Parameters
+    ----------
+    setup : str
+      Required for MasterFrame loading
+    tslits_dict : dict
+      Slits dict; required for processing
+    wvimg_settings : dict
+      Settings for wavelength image loading or generation
+    mstilts : ndarray
+      Tilts image; required for processing
+    wv_calib : dict
+      1D wavelength fits
+    maskslits : ndarray (bool)
+      Indicates which slits are masked
+
+    Returns
+    -------
+    mswave : ndarray
+    waveImage : WaveImage object
+
+    """
+    # Instantiate
+    waveImage = WaveImage(mstilts, wv_calib, settings=wvimg_settings,
+                                    setup=setup, maskslits=maskslits,
+                                    slitpix=tslits_dict['slitpix'])
+    # Attempt to load master
+    mswave = waveImage.master()
+    if mswave is None:
+        mswave = waveImage._build_wave()
+    # Save to hard-drive
+    waveImage.save_master(mswave, steps=waveImage.steps)
+    # Return
+    return mswave, waveImage

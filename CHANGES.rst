@@ -136,7 +136,6 @@
 - Moved arflux to core and stripped out slf, settings
 - Really restricting to nobj when user requests it
 - New tests
-
 - Introduces WaveCalib class
 - Push ararc.py to core/ after removing slf and settings dependencies
 - Further refactor masters including MasterFrame; includes addressing previous comment from RC
@@ -145,6 +144,45 @@
 - Push get_censpec() to ararc.py
 - New tests; limited docs
 - TraceSlits load method pushed outside the class
+- Introduces WaveTilts class
+- Significant modification to tilt recipe including deprecation of PCA
+- Moved tilt tracing algorithms from artrace.py to artracewave.py in core/
+- Added 2D Legendre fitting to polyfit2d_general
+- New trace slits tilts  settings (for 2D fitting)
+- New QA plot
+- New pypit_chk_tilts script
+- New docs
+- New tests
+- Introduces FlatField class
+- Adds FlatField Notebook, tests
+- Pushes flat field algorithms into core/arflat.py
+- Main flatfield method broken into a few pieces
+- Further refactoring of armasters
+- Further refactoring related to settings and ScienceExposure
+- WaveImage class
+- Strip mswave from ScienceExposure
+- New tests
+- Push get_calib methods into the individual classes
+- Significant refactoring in arms.py followed
+- Rename slits_dict -> tslits_dict
+- Use tslits_dict in wavetilts.py
+
+- Introduce ScienceImage class
+- Substantial refactoring in arms.py followed
+- Notebook too
+- Reversed exposure/det loops for the (last?) time
+- Generated arskysub.py in core/
+- Significant portions of arproc.py are now superfluous
+- Moved flexure_qa to arwave.py
+- Significant refactoring of arsave.py (also moved to core/)
+- Removed settings and slf from arspecobj.py
+- Refactored trace_objects_in_slit()
+- Refactoring of flexure algorithms
+- Adds build_crmask() and flat_field() methods to ProcessImages
+- Completed the deprecation of arsciexp (RIP)
+- Many test updates
+- Doc strings improved but no new main docs
+- Completed armasters refactor and moved to core/
 
 0.7 (2017-02-07)
 ----------------

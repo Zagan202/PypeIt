@@ -134,7 +134,7 @@ class BaseArgFlag(BaseFunctions):
     def __init__(self, defname, savname):
         """ Initialize the base functions for the arguments and flags.
         This class contains the functions to load the arguments and flags
-        that are common to all reduction programs (i..e ARMED, ARMLSD, etc.)
+        that are common to all reduction programs (i..e ARMED, ARMS, etc.)
 
         Parameters
         ----------
@@ -193,7 +193,7 @@ class BaseArgFlag(BaseFunctions):
         Parameters
         ----------
         lst : str or list
-          Either a string containing the keyword argument (e.g. 'run redname ARMLSD')
+          Either a string containing the keyword argument (e.g. 'run redname ARMS')
           or a list containing the elements of the keyword argument (e.g. ['run', 'redname']).
           If lst is a list, value must be specified.
         value : any type
@@ -226,7 +226,7 @@ class BaseArgFlag(BaseFunctions):
         ----------
         lstall : list
           Each element of the lstall is a list containing a full line of a setting
-          (e.g. a single element of lstall might look like ['run', 'redname', 'ARMLSD'])
+          (e.g. a single element of lstall might look like ['run', 'redname', 'ARMS'])
         """
         for ll in range(len(lstall)):
             lst = lstall[ll]
@@ -2152,8 +2152,8 @@ class BaseArgFlag(BaseFunctions):
             msgs.error("The argument of {0:s} must be >= 0".format(get_current_name()))
         self.update(v)
 
-    def trace_slits_tilts_trthrsh(self, v):
-        """ What is the theshold for including an arc line in the tilt analysis
+    def trace_slits_tilts_tracethresh(self, v):
+        """ What is the threshold for including an arc line in the tilt analysis
 
         Parameters
         ----------
@@ -3340,7 +3340,7 @@ class BaseSpect(BaseFunctions):
         v : str
           value of the keyword argument given by the name of this function
         """
-        allowed = ['ARMLSD', 'ARMED']
+        allowed = ['ARMS', 'ARMED']
         v = key_allowed(v, allowed, upper=True)
         self.update(v.upper())
 
@@ -3726,7 +3726,7 @@ class BaseSpect(BaseFunctions):
         self.update(v)
 
 
-class ARMLSD(BaseArgFlag):
+class ARMS(BaseArgFlag):
 
     def reduce_calibrate_flux(self, v):
         """ Should a flux calibration be performed?
@@ -3874,7 +3874,7 @@ class ARMED(BaseArgFlag):
         self.update(v)
 
 
-class ARMLSD_spect(BaseSpect):
+class ARMS_spect(BaseSpect):
     pass
 
 
@@ -4600,7 +4600,7 @@ def dummy_settings(pypitdir=None, nfile=10, spectrograph='shane_kast_blue',
     # Dummy argflag
     if spectrograph not in ['shane_kast_blue', 'keck_nirspec']:
         msgs.error("Not setup for your instrument")  # You will need to fuss with scidx
-    argf = get_argflag_class(("ARMLSD", spectrograph))
+    argf = get_argflag_class(("ARMS", spectrograph))
     argf.init_param()
     if pypitdir is None:
         pypitdir = __file__[0:__file__.rfind('/')]
@@ -4609,7 +4609,7 @@ def dummy_settings(pypitdir=None, nfile=10, spectrograph='shane_kast_blue',
     argf.set_param('run spectrograph {:s}'.format(spectrograph))
     argf.set_param('run directory science ./')
     # Dummy spect
-    spect = get_spect_class(("ARMLSD", spectrograph, "dummy"))
+    spect = get_spect_class(("ARMS", spectrograph, "dummy"))
     lines = spect.load_file(base=True)  # Base spectrograph settings
     spect.set_paramlist(lines)
     lines = spect.load_file()

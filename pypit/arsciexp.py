@@ -28,6 +28,7 @@ class ScienceExposure:
                  idx_sci=None):
 
         # Set indices used for frame combination
+        msgs.error("DEPRECATED")
         self.sci_ID = sci_ID  # Binary 1,2,4,8,..
         self._idx_sci = np.where((fitstbl['sci_ID'] == sci_ID) & fitstbl['science'])[0]
         if idx_sci is not None:
@@ -127,7 +128,7 @@ class ScienceExposure:
         self._bgframe = [None for all in range(ndet)]
         self._scimask = [None for all in range(ndet)]        # Mask (1=Bad pix; 2=CR)
         self._scitrace = [None for all in range(ndet)]
-        self._slitprof = [None for all in range(ndet)]   # Slit profiles at each position on the detector
+        #self._slitprof = [None for all in range(ndet)]   # Slit profiles at each position on the detector
         self._specobjs = [None for all in range(ndet)]
         # Initialize some extraction products
         self._ext_boxcar = [None for all in range(ndet)]

@@ -18,8 +18,8 @@ from pypit import msgs
 from pypit import ardebug as debugger
 from pypit.core import arflux
 from pypit import arload
-from pypit import armasters
-from pypit import arsave
+from pypit.core import armasters
+from pypit.core import arsave
 from pypit import arutils
 from pypit import masterframe
 
@@ -43,7 +43,7 @@ def kludge_settings(instr):
     #settings.argflag['reduce']['masters']['setup'] = 'C_01_aa'
     #
     # Load default spectrograph settings
-    spect = settings.get_spect_class(('ARMLSD', instr, 'pypit'))  # '.'.join(redname.split('.')[:-1])))
+    spect = settings.get_spect_class(('ARMS', instr, 'pypit'))  # '.'.join(redname.split('.')[:-1])))
     lines = spect.load_file(base=True)  # Base spectrograph settings
     spect.set_paramlist(lines)
     lines = spect.load_file()  # Instrument specific

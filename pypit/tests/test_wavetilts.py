@@ -44,15 +44,17 @@ def test_step_by_step():
     msarc, TSlits = tstutils.load_kast_blue_masters(aimg=True, tslits=True)
     # Instantiate
     setup = 'A_01_aa'
-    settings_det = dict(det01={'saturation': 60000., 'nonlinear': 0.9})
-    waveTilts = wavetilts.WaveTilts(msarc, det=1, setup=setup, rordloc=TSlits.rcen, lordloc=TSlits.lcen,
-                                    pixlocn=TSlits.pixlocn, pixcen=TSlits.pixcen, settings_det=settings_det)
+    settings_det = dict(saturation=60000., nonlinear=0.9)
+    waveTilts = wavetilts.WaveTilts(msarc, det=1, setup=setup,
+                                    tslits_dict=TSlits.tslits_dict,
+                                    pixlocn=TSlits.pixlocn,
+                                    settings_det=settings_det)
     # Extract arcs
     arccen, maskslits = waveTilts._extract_arcs()
     assert arccen.shape == (2048,1)
     # Tilts in the slit
     slit = 0
-    waveTilts.settings['tilts']['trthrsh'] = 500.  # Lowers the thershold amplitude of the arc lines used
+    waveTilts.settings['tilts']['tracethresh'] = 500.  # Lowers the thershold amplitude of the arc lines used
     trcdict = waveTilts._trace_tilts(slit)
     assert isinstance(trcdict, dict)
     # Analyze
@@ -73,9 +75,10 @@ def test_run():
     msarc, TSlits = tstutils.load_kast_blue_masters(aimg=True, tslits=True)
     # Instantiate
     setup = 'A_01_aa'
-    settings_det = dict(det01={'saturation': 60000., 'nonlinear': 0.9})
-    waveTilts = wavetilts.WaveTilts(msarc, det=1, setup=setup, rordloc=TSlits.rcen, lordloc=TSlits.lcen,
-                                    pixlocn=TSlits.pixlocn, pixcen=TSlits.pixcen, settings_det=settings_det)
+    settings_det = dict(saturation=60000., nonlinear=0.9)
+    waveTilts = wavetilts.WaveTilts(msarc, det=1, setup=setup,
+                                    tslits_dict=TSlits.tslits_dict,
+                                    pixlocn=TSlits.pixlocn, settings_det=settings_det)
     # Run
     tilts, mask = waveTilts.run(doqa=False)
     assert isinstance(tilts, np.ndarray)
