@@ -348,7 +348,6 @@ class ProcessImages(object):
         self.stack = arflat.flatfield(self.stack, self.pixel_flat, self.bpm, slitprofile=self.slitprof)
         return self.stack
 
-
     def process(self, bias_subtract=None, apply_gain=False,
                 trim=True, overwrite=False,
                 pixel_flat=None, slitprof=None):
@@ -445,6 +444,7 @@ class ProcessImages(object):
           Internal name of the image to show
             proc_image, raw_image, stack
         idx : int
+
           Specifies the index of the raw or processed image
           Required if proc_image or raw_image is called
         display : str

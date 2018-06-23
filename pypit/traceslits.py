@@ -6,7 +6,7 @@ import numpy as np
 import os
 from subprocess import Popen
 
-#from importlib import reload
+from importlib import reload
 
 from astropy.io import fits
 
@@ -199,6 +199,7 @@ class TraceSlits(masterframe.MasterFrame):
         ----------
         root : str
           Path + root name for the TraceSlits objects (FITS, JSON)
+          e.g.  MF_keck_lris_red/MasterTrace_A_01_aa
 
         Returns
         -------
@@ -620,6 +621,7 @@ class TraceSlits(masterframe.MasterFrame):
         self.tc_dict  : dict (internal)
 
         """
+        reload(artraceslits)
         # Settings
         if 'maxshift' in self.settings['trace']['slits'].keys():
             maxshift=self.settings['trace']['slits']['maxshift']
@@ -848,6 +850,8 @@ class TraceSlits(masterframe.MasterFrame):
         elif attr == 'siglev':
             # TODO -- Figure out how to set the cut levels
             debugger.show_image(self.siglev)
+        elif attr == 'mstrace':
+            debugger.show_image(self.mstrace)
 
     def save_master(self, root=None, gzip=True):
         """

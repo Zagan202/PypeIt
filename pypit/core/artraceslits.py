@@ -596,7 +596,6 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
         # Flag: 0=not traced; 1=traced; -1=duplicate
         tc_dict[side]['flags'] = np.zeros(len(uni_e), dtype=int)
 
-
         # Loop on edges to trace
         niter = 0
         while np.any(tc_dict[side]['flags'] == 0):
@@ -667,6 +666,7 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                     tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
                     # Zero out edgearr
                     edgearr[edgearr==eval] = 0
+                    debugger.set_trace()
                     continue
                 # Do not allow a right edge at x=0
                 if (side == 'right') and (new_xval==0):
@@ -680,7 +680,7 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                     tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
                     edgearr[edgearr==eval] = 0
                     continue
-                # Check it really is a new xval (within TOL)
+                # Check it really is  new xval (within TOL)
                 if niter > 0:
                     curr_xvals = np.array([tc_dict[side]['xval'][key] for key in tc_dict[side]['xval'].keys()])
                     if np.min(np.abs(new_xval-curr_xvals)) < TOL:
@@ -691,6 +691,8 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
 
                 # Edge is ok, keep it
                 xvals = np.round(xset[:, kk]).astype(int)
+                if x == 512:
+                    debugger.set_trace()
                 # Single edge requires a bit more care (it is so precious!)
                 if len(uni_e) == 1:
                         if np.sum(edgearr==eval)>len(yval):
@@ -727,6 +729,8 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
             niter += 1
 
     # Reset edgearr values to run sequentially and update the dict
+    debugger.show_image(new_edgarr)
+    debugger.set_trace()
     for side in ['left', 'right']:
         if np.any(tc_dict[side]['flags'] == -1):
             # Loop on good edges
