@@ -839,7 +839,7 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
         top_row = int(3.*nrow/4)
         mid_row = int(nrow/2)
         bottom_row = int(1.*nrow/4)
-        for trc_row in [top_row, mid_row, bottom_row]:
+        for ss, trc_row in enumerate([mid_row, top_row, bottom_row]):
             # Setup
             in_trc_row = all_e[0] == trc_row
             xinit = all_e[1][in_trc_row]
@@ -855,108 +855,106 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
         # Did we miss any?
         bad_t = xerr == 999.
         missed = np.where(np.sum(bad_t,axis=0) == nrow)[0]
-        for ii in missed:
-
-            txset, txerr = trace_crude_init(trc_img, np.array(xinit), trc_row, maxshift=maxshift)
-
-
-        if side == 'left':
-            xset, xerr = trace_crude_init(np.maximum(siglev, -0.1), np.array(xinit), yrow, maxshift=maxshift)
-        else:
-            xset, xerr = trace_crude_init(np.maximum(-1*siglev, -0.1), np.array(xinit), yrow, maxshift=maxshift)
-
-            # Save
-            if niter == 0:
-                tc_dict[side]['xset'] = xset
-                tc_dict[side]['xerr'] = xerr
-            else: # Need to append
-                tc_dict[side]['xset'] = np.append(tc_dict[side]['xset'], xset, axis=1)
-                tc_dict[side]['xerr'] = np.append(tc_dict[side]['xerr'], xerr, axis=1)
-
-
-            # Good values allowing for edge of detector
-            goodx = np.any([(xerr != 999.), (xset==0.), (xset==edgearr.shape[1]-1.)], axis=0)
+        for imiss in missed:
+            # Grab the 'best' row to start on
+            sub_e = np.where(edgearr == uni_e[imiss])
+            mid = len(sub_e[0]) // 2
+            yrow = sub_e[0][mid]
+            xrow = sub_e[1][mid]
+            # Trace
+            txset, txerr = trace_crude_init(trc_img, np.array([xrow]), yrow, maxshift=maxshift)
             # Fill in
-            for kk, x in enumerate(xinit):
-                yval = np.where(goodx[:,kk])[0]
-                eval = edgearr[yrow,x]
-                new_xval = int(np.round(xset[ycen, kk]))
+            gd = (txerr[:,0] != 999.) & (xerr[:,imiss] == 999.)
+            xset[gd,imiss] = txset[gd,0]
+            xerr[gd,imiss] = txerr[gd,0]
 
-                # Check whether the trace is well determined on tface of the detector
-                #    If only one trace, this check is ignored
-                if (len(yval) < int(tfrac*edgearr.shape[0])) and (len(uni_e) > 1):
-                    msgs.warn("Edge at x={}, y={} traced less than {} of the detector.  Removing".format(
-                        x,yrow,tfrac))
-                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
-                    # Zero out edgearr
-                    edgearr[edgearr==eval] = 0
-                    debugger.set_trace()
-                    continue
-                # Do not allow a right edge at x=0
-                if (side == 'right') and (new_xval==0):
-                    msgs.warn("Right edge at x=0 removed")
-                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
-                    edgearr[edgearr==eval] = 0
-                    continue
-                # or a left edge at x=end
-                if (side == 'left') and (new_xval==edgearr.shape[1]-1):
-                    msgs.warn("Left edge at detector right edge removed")
-                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
-                    edgearr[edgearr==eval] = 0
-                    continue
-                # Check it really is  new xval (within TOL)
-                if niter > 0:
-                    curr_xvals = np.array([tc_dict[side]['xval'][key] for key in tc_dict[side]['xval'].keys()])
-                    if np.min(np.abs(new_xval-curr_xvals)) < TOL:
-                        msgs.warn("Edge matched exiting xval within TOL, clipping")
-                        tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
-                        edgearr[edgearr==eval] = 0
-                        continue
+        # Save
+        tc_dict[side]['xset'] = xset
+        tc_dict[side]['xerr'] = xerr
 
-                # Edge is ok, keep it
-                xvals = np.round(xset[:, kk]).astype(int)
-                # Single edge requires a bit more care (it is so precious!)
-                if len(uni_e) == 1:
-                        if np.sum(edgearr==eval)>len(yval):
-                            new_edgarr[edgearr==eval] = edgearr[edgearr==eval]
-                        else:
-                            new_edgarr[yval, xvals[yval]] = eval
-                else:
-                    # Traces can disappear and then the crude trace can wind up hitting a neighbor
-                    # Therefore, take only the continuous good piece from the starting point
-                    ybad_xerr = np.where(~goodx[:,kk])[0]
-                    # Lower point
-                    ylow = ybad_xerr < yrow
-                    if np.any(ylow):
-                        y0 = np.max(ybad_xerr[ylow])+1  # Avoid the bad one
-                    else:
-                        y0 = 0
-                    # Upper
-                    yhi = ybad_xerr > yrow
-                    if np.any(yhi):
-                        y1 = np.min(ybad_xerr[yhi])
-                    else:
-                        y1 = edgearr.shape[0]
-                    new_yval = np.arange(y0,y1).astype(int)  # Yes, this is necessary;  slicing fails..
-                    #
-                    new_edgarr[new_yval, xvals[new_yval]] = eval
-                    if (side == 'right') & (x == 510):
-                        debugger.set_trace()
-                    if x == 512:
-                        debugger.set_trace()
-                    #new_edgarr[yval, xvals[yval]] = eval
-                # Flag
-                tc_dict[side]['flags'][uni_e == eval] = 1
-                # Save new_xval
-                tc_dict[side]['xval'][str(eval)] = new_xval
+        # Generate xinit
+        xinit = xset[ycen,:].astype(int)
+
+        # Good values allowing for edge of detector
+        goodx = np.any([(xerr != 999.), (xset==0.), (xset==edgearr.shape[1]-1.)], axis=0)
+
+        # Fill in
+        for kk, x in enumerate(xinit):
+            yval = np.where(goodx[:,kk])[0]
+            eval = uni_e[kk] # edgearr[yrow,x]
+            new_xval = int(np.round(xset[ycen, kk]))
+
+            # Check whether the trace is well determined on tface of the detector
+            #    If only one trace, this check is ignored
+            if (len(yval) < int(tfrac*edgearr.shape[0])) and (len(uni_e) > 1):
+                msgs.warn("Edge at x={}, y={} traced less than {} of the detector.  Removing".format(
+                    x,yrow,tfrac))
+                tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
                 # Zero out edgearr
                 edgearr[edgearr==eval] = 0
-            # Next pass
-            niter += 1
+                debugger.set_trace()
+                continue
+            # Do not allow a right edge at x=0
+            if (side == 'right') and (new_xval==0):
+                msgs.warn("Right edge at x=0 removed")
+                tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                edgearr[edgearr==eval] = 0
+                continue
+            # or a left edge at x=end
+            if (side == 'left') and (new_xval==edgearr.shape[1]-1):
+                msgs.warn("Left edge at detector right edge removed")
+                tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                edgearr[edgearr==eval] = 0
+                continue
+            # Check it really is  new xval (within TOL)
+            if niter > 0:
+                curr_xvals = np.array([tc_dict[side]['xval'][key] for key in tc_dict[side]['xval'].keys()])
+                if np.min(np.abs(new_xval-curr_xvals)) < TOL:
+                    msgs.warn("Edge matched exiting xval within TOL, clipping")
+                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                    edgearr[edgearr==eval] = 0
+                    continue
+
+            # Edge is ok, keep it
+            xvals = np.round(xset[:, kk]).astype(int)
+            # Single edge requires a bit more care (it is so precious!)
+            if len(uni_e) == 1:
+                    if np.sum(edgearr==eval)>len(yval):
+                        new_edgarr[edgearr==eval] = edgearr[edgearr==eval]
+                    else:
+                        new_edgarr[yval, xvals[yval]] = eval
+            else:
+                # Traces can disappear and then the crude trace can wind up hitting a neighbor
+                # Therefore, take only the continuous good piece from the starting point
+                ybad_xerr = np.where(~goodx[:,kk])[0]
+                # Lower point
+                ylow = ybad_xerr < yrow
+                if np.any(ylow):
+                    y0 = np.max(ybad_xerr[ylow])+1  # Avoid the bad one
+                else:
+                    y0 = 0
+                # Upper
+                yhi = ybad_xerr > yrow
+                if np.any(yhi):
+                    y1 = np.min(ybad_xerr[yhi])
+                else:
+                    y1 = edgearr.shape[0]
+                new_yval = np.arange(y0,y1).astype(int)  # Yes, this is necessary;  slicing fails..
+                #
+                new_edgarr[new_yval, xvals[new_yval]] = eval
+                if (side == 'right') & (x == 510):
+                    debugger.set_trace()
+                if x == 512:
+                    debugger.set_trace()
+                #new_edgarr[yval, xvals[yval]] = eval
+            # Flag
+            tc_dict[side]['flags'][uni_e == eval] = 1
+            # Save new_xval
+            tc_dict[side]['xval'][str(eval)] = new_xval
+            # Zero out edgearr
+            edgearr[edgearr==eval] = 0
 
     # Reset edgearr values to run sequentially and update the dict
-    debugger.show_image(new_edgarr)
-    debugger.set_trace()
     for side in ['left', 'right']:
         if np.any(tc_dict[side]['flags'] == -1):
             # Loop on good edges
