@@ -650,6 +650,9 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                 tc_dict[side]['xset'] = np.append(tc_dict[side]['xset'], xset, axis=1)
                 tc_dict[side]['xerr'] = np.append(tc_dict[side]['xerr'], xerr, axis=1)
 
+            if side == 'right':
+                debugger.set_trace()
+
             # Good values allowing for edge of detector
             goodx = np.any([(xerr != 999.), (xset==0.), (xset==edgearr.shape[1]-1.)], axis=0)
             # Fill in
