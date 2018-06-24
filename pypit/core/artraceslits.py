@@ -536,7 +536,7 @@ def edgearr_mslit_sync(edgearr, tc_dict, ednum, insert_buff=5, add_left_edge_sli
     return new_edgearr
 
 
-def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
+def old_edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                    maxshift=0.15):
     """ Use trace_crude to refine slit edges
     It is also used to remove bad slit edges and merge slit edges
@@ -650,8 +650,6 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                 tc_dict[side]['xset'] = np.append(tc_dict[side]['xset'], xset, axis=1)
                 tc_dict[side]['xerr'] = np.append(tc_dict[side]['xerr'], xerr, axis=1)
 
-            if side == 'right':
-                debugger.set_trace()
 
             # Good values allowing for edge of detector
             goodx = np.any([(xerr != 999.), (xset==0.), (xset==edgearr.shape[1]-1.)], axis=0)
@@ -694,8 +692,6 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
 
                 # Edge is ok, keep it
                 xvals = np.round(xset[:, kk]).astype(int)
-                if x == 512:
-                    debugger.set_trace()
                 # Single edge requires a bit more care (it is so precious!)
                 if len(uni_e) == 1:
                         if np.sum(edgearr==eval)>len(yval):
@@ -721,6 +717,10 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
                     new_yval = np.arange(y0,y1).astype(int)  # Yes, this is necessary;  slicing fails..
                     #
                     new_edgarr[new_yval, xvals[new_yval]] = eval
+                    if (side == 'right') & (x == 510):
+                        debugger.set_trace()
+                    if x == 512:
+                        debugger.set_trace()
                     #new_edgarr[yval, xvals[yval]] = eval
                 # Flag
                 tc_dict[side]['flags'][uni_e == eval] = 1
@@ -760,6 +760,228 @@ def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
     # Return
     return new_edgarr, tc_dict.copy()
 
+
+def edgearr_tcrude(edgearr, siglev, ednum, TOL=3., tfrac=0.33, verbose=False,
+                   maxshift=0.15):
+    """ Use trace_crude to refine slit edges
+    It is also used to remove bad slit edges and merge slit edges
+
+    Only recommended for ARMLSD
+
+    Parameters
+    ----------
+    edgearr : ndarray
+      Edge array
+    siglev : ndarray
+      Sigma level image
+    ednum : int
+    TOL : float (optional)
+      Tolerance for matching 2 edges (and ignoring one)
+    tfrac : float (optional)
+      Fraction of the slit edge that must be traced to keep
+      There are exceptions, however (e.g. single slits)
+    maxshift : float
+      Maximum shift in trace crude
+
+    Returns
+    -------
+    new_edgarr : ndarray
+       A new version of the edgearr
+    tc_dict : dict
+       A dict that has book-keeping on the edges
+         left/right
+             xval -- Position of edge at ycen (1/2 point on the detector); most useful parameter recorded
+             uni_idx -- Unique edge numbers
+             flags -- Internal book-keeping on edge analysis
+             xset -- trace set values
+             xerr -- trace set errors
+    """
+    msgs.info("Crude tracing the edges")
+    # Init
+    ycen = edgearr.shape[0] // 2
+    nrow = edgearr.shape[0]
+
+    # Items to return
+    new_edgarr = np.zeros_like(edgearr, dtype=int)
+    tc_dict = {}
+
+    # Loop on side
+    for side in ['left', 'right']:
+        tc_dict[side] = {}
+        tc_dict[side]['xval'] = {}
+
+        # Unique edge values
+        if side == 'left':
+            uni_e = np.unique(edgearr[edgearr < 0])
+        else:
+            uni_e = np.unique(edgearr[edgearr > 0])
+
+        # Save sorted (in absolute value) -- This is necessary
+        uni_e = uni_e[np.argsort(np.abs(uni_e))]
+        tc_dict[side]['uni_idx'] = uni_e
+
+        # Flag: 0=not traced; 1=traced; -1=duplicate
+        tc_dict[side]['flags'] = np.zeros(len(uni_e), dtype=int)
+
+        # Loop on edges to trace
+        niter = 0
+        xset = np.zeros((nrow, len(uni_e)))
+        xerr = np.zeros_like(xset) + 999.
+        # Trace crude
+        if side == 'left':
+            trc_img = np.maximum(siglev, -0.1)
+            all_e = np.where(edgearr < 0)
+        else:
+            trc_img = np.maximum(-1*siglev, -0.1)
+            all_e = np.where(edgearr > 0)
+
+        # Trace at 3 spots
+        top_row = int(3.*nrow/4)
+        mid_row = int(nrow/2)
+        bottom_row = int(1.*nrow/4)
+        for trc_row in [top_row, mid_row, bottom_row]:
+            # Setup
+            in_trc_row = all_e[0] == trc_row
+            xinit = all_e[1][in_trc_row]
+            eval = edgearr[trc_row, xinit]
+            # Trace
+            txset, txerr = trace_crude_init(trc_img, np.array(xinit), trc_row, maxshift=maxshift)
+            # Fill
+            for kk,ieval,x in zip(range(len(xinit)), eval,xinit):
+                jdx = np.where(uni_e == ieval)[0][0]
+                gd = (txerr[:,kk] != 999.) & (xerr[:,jdx] == 999.)
+                xset[gd,jdx] = txset[gd,kk]
+                xerr[gd,jdx] = txerr[gd,kk]
+        # Did we miss any?
+        bad_t = xerr == 999.
+        missed = np.where(np.sum(bad_t,axis=0) == nrow)[0]
+        for ii in missed:
+
+            txset, txerr = trace_crude_init(trc_img, np.array(xinit), trc_row, maxshift=maxshift)
+
+
+        if side == 'left':
+            xset, xerr = trace_crude_init(np.maximum(siglev, -0.1), np.array(xinit), yrow, maxshift=maxshift)
+        else:
+            xset, xerr = trace_crude_init(np.maximum(-1*siglev, -0.1), np.array(xinit), yrow, maxshift=maxshift)
+
+            # Save
+            if niter == 0:
+                tc_dict[side]['xset'] = xset
+                tc_dict[side]['xerr'] = xerr
+            else: # Need to append
+                tc_dict[side]['xset'] = np.append(tc_dict[side]['xset'], xset, axis=1)
+                tc_dict[side]['xerr'] = np.append(tc_dict[side]['xerr'], xerr, axis=1)
+
+
+            # Good values allowing for edge of detector
+            goodx = np.any([(xerr != 999.), (xset==0.), (xset==edgearr.shape[1]-1.)], axis=0)
+            # Fill in
+            for kk, x in enumerate(xinit):
+                yval = np.where(goodx[:,kk])[0]
+                eval = edgearr[yrow,x]
+                new_xval = int(np.round(xset[ycen, kk]))
+
+                # Check whether the trace is well determined on tface of the detector
+                #    If only one trace, this check is ignored
+                if (len(yval) < int(tfrac*edgearr.shape[0])) and (len(uni_e) > 1):
+                    msgs.warn("Edge at x={}, y={} traced less than {} of the detector.  Removing".format(
+                        x,yrow,tfrac))
+                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                    # Zero out edgearr
+                    edgearr[edgearr==eval] = 0
+                    debugger.set_trace()
+                    continue
+                # Do not allow a right edge at x=0
+                if (side == 'right') and (new_xval==0):
+                    msgs.warn("Right edge at x=0 removed")
+                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                    edgearr[edgearr==eval] = 0
+                    continue
+                # or a left edge at x=end
+                if (side == 'left') and (new_xval==edgearr.shape[1]-1):
+                    msgs.warn("Left edge at detector right edge removed")
+                    tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                    edgearr[edgearr==eval] = 0
+                    continue
+                # Check it really is  new xval (within TOL)
+                if niter > 0:
+                    curr_xvals = np.array([tc_dict[side]['xval'][key] for key in tc_dict[side]['xval'].keys()])
+                    if np.min(np.abs(new_xval-curr_xvals)) < TOL:
+                        msgs.warn("Edge matched exiting xval within TOL, clipping")
+                        tc_dict[side]['flags'][uni_e==eval] = -1  # Clip me
+                        edgearr[edgearr==eval] = 0
+                        continue
+
+                # Edge is ok, keep it
+                xvals = np.round(xset[:, kk]).astype(int)
+                # Single edge requires a bit more care (it is so precious!)
+                if len(uni_e) == 1:
+                        if np.sum(edgearr==eval)>len(yval):
+                            new_edgarr[edgearr==eval] = edgearr[edgearr==eval]
+                        else:
+                            new_edgarr[yval, xvals[yval]] = eval
+                else:
+                    # Traces can disappear and then the crude trace can wind up hitting a neighbor
+                    # Therefore, take only the continuous good piece from the starting point
+                    ybad_xerr = np.where(~goodx[:,kk])[0]
+                    # Lower point
+                    ylow = ybad_xerr < yrow
+                    if np.any(ylow):
+                        y0 = np.max(ybad_xerr[ylow])+1  # Avoid the bad one
+                    else:
+                        y0 = 0
+                    # Upper
+                    yhi = ybad_xerr > yrow
+                    if np.any(yhi):
+                        y1 = np.min(ybad_xerr[yhi])
+                    else:
+                        y1 = edgearr.shape[0]
+                    new_yval = np.arange(y0,y1).astype(int)  # Yes, this is necessary;  slicing fails..
+                    #
+                    new_edgarr[new_yval, xvals[new_yval]] = eval
+                    if (side == 'right') & (x == 510):
+                        debugger.set_trace()
+                    if x == 512:
+                        debugger.set_trace()
+                    #new_edgarr[yval, xvals[yval]] = eval
+                # Flag
+                tc_dict[side]['flags'][uni_e == eval] = 1
+                # Save new_xval
+                tc_dict[side]['xval'][str(eval)] = new_xval
+                # Zero out edgearr
+                edgearr[edgearr==eval] = 0
+            # Next pass
+            niter += 1
+
+    # Reset edgearr values to run sequentially and update the dict
+    debugger.show_image(new_edgarr)
+    debugger.set_trace()
+    for side in ['left', 'right']:
+        if np.any(tc_dict[side]['flags'] == -1):
+            # Loop on good edges
+            gde = np.where(tc_dict[side]['flags'] == 1)[0]
+            for ss,igde in enumerate(gde):
+                if side == 'left':
+                    newval = -1*ednum - ss
+                else:
+                    newval = ednum + ss
+                oldval = tc_dict[side]['uni_idx'][igde]
+                pix = new_edgarr == oldval
+                new_edgarr[pix] = newval
+                # Reset the dict too..
+                if newval == 0:
+                    debugger.set_trace()
+                tc_dict[side]['xval'][str(newval)] = tc_dict[side]['xval'].pop(str(oldval))
+    # Remove uni_idx
+    for side in ['left', 'right']:
+        for key in ['uni_idx', 'xset', 'xerr']:
+            tc_dict[side].pop(key)
+    if verbose:
+        print(tc_dict['left']['xval'])
+        print(tc_dict['right']['xval'])
+    # Return
+    return new_edgarr, tc_dict.copy()
 
 def edgearr_from_user(shape, ledge, redge, det):
     """ Add a user-defined slit?
