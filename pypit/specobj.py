@@ -15,6 +15,49 @@ from pypit import arparse
 from pypit.core import artraceslits
 from pypit import ardebug as debugger
 
+from astropy import table
+
+class Specobj2(table.Table):
+    """Class to handle object spectra from a single exposure
+    One generates one of these Objects for each spectrum in the exposure. They are instantiated by the object
+    finding routine, and then all spectral extraction information for the object are assigned as attributes
+
+    Parameters:
+    ----------
+    shape: tuple (nspec, nspat)
+       dimensions of the spectral image that the object is identified on
+    slit_spat_pos: tuple of floats (spat_left,spat_right)
+        The spatial pixel location of the left and right slit trace arrays evaluated at slit_spec_pos (see below). These
+        will be in the range (0,nspat)
+    slit_spec_pos: float
+        The midpoint of the slit location in the spectral direction. This will typically be nspec/2, but must be in the
+        range (0,nspec)
+
+    Optional Parameters:
+    -------------------
+    det:   int
+        Detector number. (default = 1, max = 99)
+    config: str
+       Instrument configuration (default = None)
+    scidx: int
+       Exposure index (deafult = 1, max=9999)
+    objtype: str, optional
+       Type of object ('unknown', 'standard', 'science')
+
+    def __init__(self, nspec, slit_spat_pos, slit_spec_pos, det = 1, config = None, slitid = 999, scidx = 1, objtype='unknown'):
+
+        # initialize the parent class
+        table.Table.__init__(self)
+     """
+
+
+
+
+
+
+
+
+
 class SpecObj(object):
     """Class to handle object spectra from a single exposure
     One generates one of these Objects for each spectrum in the exposure. They are instantiated by the object
