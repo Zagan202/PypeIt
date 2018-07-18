@@ -48,7 +48,7 @@ class Specobj2(table.Table):
 
         # initialize the parent class
         table.Table.__init__(self)
-     """
+        """
 
 
 
