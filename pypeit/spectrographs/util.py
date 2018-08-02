@@ -67,7 +67,7 @@ def load_spectrograph(spectrograph=None):
         return spectrographs.tng_dolores.TngDoloresSpectrograph()
 
     if spectrograph == 'vlt_xshooter_vis':
-        return spectrographs.vlt_xshooter.VLTXShooterVisSpectrograph()
+        return spectrographs.vlt_xshooter_vis.VLTXShooterVisSpectrograph()
 
     msgs.error("Spectrograph not supported")
 
