@@ -174,6 +174,11 @@ def load_parse_dict(modify_dict=None):
     # XeI
     arcline_parse['XeI'] = copy.deepcopy(dict_parse)
     arcline_parse['XeI']['min_intensity'] = 1000.
+    # OH_triplespec
+    arcline_parse['OH_triplespec'] = copy.deepcopy(dict_parse)
+    arcline_parse['OH_triplespec']['min_intensity'] = 100.
+
+
     #
     if modify_dict is not None:
         for key in modify_dict.keys():  # dict.update doesn't nest

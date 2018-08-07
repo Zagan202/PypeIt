@@ -1037,7 +1037,7 @@ class WavelengthSolutionPar(ParSet):
         """
         Return the valid lamp ions
         """
-        return [ 'ArI', 'CdI', 'HgI', 'HeI', 'KrI', 'NeI', 'XeI', 'ZnI', 'ThAr' ]
+        return [ 'ArI', 'CdI', 'HgI', 'HeI', 'KrI', 'NeI', 'XeI', 'ZnI', 'ThAr', 'OH_triplespec']
 
     @staticmethod
     def valid_media():

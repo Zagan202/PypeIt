@@ -423,6 +423,8 @@ class ProcessImages(object):
         self.stack : ndarray
 
         """
+        # ToDo: This code seems to do nothing if bias_subtract=None
+
         # Over-write?
         if (inspect.stack()[0][3] in self.steps) & (not overwrite):
             msgs.warn("Images already combined.  Use overwrite=True to do it again.")
