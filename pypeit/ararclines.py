@@ -176,7 +176,7 @@ def load_parse_dict(modify_dict=None):
     arcline_parse['XeI']['min_intensity'] = 1000.
     # OH_triplespec
     arcline_parse['OH_triplespec'] = copy.deepcopy(dict_parse)
-    arcline_parse['OH_triplespec']['min_intensity'] = 100.
+    arcline_parse['OH_triplespec']['min_intensity'] = 5.
 
 
     #
